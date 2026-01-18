@@ -35,8 +35,30 @@ void GPIO_Init(GPIO_Handle_t *pGPIOHandle)
 	}
 	else
 	{
-		//this part will code later . ( interrupt mode)
+	    uint8_t pin = pGPIOHandle->GPIO_PinConfig.GPIO_PinNumber;
+	    uint8_t port = GPIO_BASEADDR_TO_PORTCODE(pGPIOHandle->pGPIOx);
+
+	    /* 1. Configure EXTI GPIO mapping */
+	    EXTI_ConfigGPIO(pin, port);
+
+	    /* 2. Configure trigger selection */
+	    if(pGPIOHandle->GPIO_PinConfig.GPIO_PinMode == GPIO_MODE_IT_FT)
+	    {
+	        EXTI_ConfigTrigger(pin, EXTI_TRIGGER_FALLING);
+	    }
+	    else if(pGPIOHandle->GPIO_PinConfig.GPIO_PinMode == GPIO_MODE_IT_RT)
+	    {
+	        EXTI_ConfigTrigger(pin, EXTI_TRIGGER_RISING);
+	    }
+	    else if(pGPIOHandle->GPIO_PinConfig.GPIO_PinMode == GPIO_MODE_IT_RFT)
+	    {
+	        EXTI_ConfigTrigger(pin, EXTI_TRIGGER_RISING_FALLING);
+	    }
+
+	    /* 3. Enable EXTI interrupt */
+	    EXTI_EnableInterrupt(pin);
 	}
+
 
 	//2. configure the speed
 	temp = (pGPIOHandle->GPIO_PinConfig.GPIO_PinSpeed << ( 2 * pGPIOHandle->GPIO_PinConfig.GPIO_PinNumber) );

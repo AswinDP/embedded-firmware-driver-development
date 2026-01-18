@@ -23,6 +23,17 @@
 
 
 
+#define GPIO_BASEADDR_TO_PORTCODE(x)  \
+        ( (x == GPIOA) ? 0 : \
+          (x == GPIOB) ? 1 : \
+          (x == GPIOC) ? 2 : \
+          (x == GPIOD) ? 3 : \
+          (x == GPIOE) ? 4 : \
+          (x == GPIOF) ? 5 : \
+          (x == GPIOG) ? 6 : \
+          (x == GPIOH) ? 7 : 0 )
+
+
 //Base Addresses of various memories
 #define FLASH_BASEADDR				0x08000000u
 #define SRAM1_BASEADDR				0x20000000u
@@ -77,6 +88,9 @@
 #define USART3_BASEADDR				(APB1_BASEADDR + 0x4800)
 #define USART2_BASEADDR				(APB1_BASEADDR + 0x4400)
 #define USART1_BASEADDR				(APB2_BASEADDR + 0x3800)
+
+//CAN Peripheral
+#define CAN_BASEADDR				(APB1_BASEADDR + 0x6400)
 
 //TIMx Peripherals
 #define TIM1_BASEADDR				(APB2_BASEADDR + 0x2C00)
@@ -449,6 +463,8 @@ typedef struct
 #define USART_ICR_CMCF      (1U << 17)  /* Character match clear */
 #define USART_ICR_WUCF      (1U << 20)  /* Wakeup from Stop mode clear */
 
+//CAN Peripheral definitions
+#define CAN						((CAN_Regs_t*)CAN_BASEADDR)
 
 //TIM Peripheral definitions
 #define TIM2   				((GP1_TIM_Regs_t*)TIM2_BASEADDR)
