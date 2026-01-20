@@ -183,58 +183,71 @@ uint8_t SPI_GetFlagStatus(SPI_Regs_t *pSPIx , uint32_t FlagName)
 
 void SPI_SendData(SPI_Regs_t *pSPIx, uint8_t *pTxBuffer, uint32_t Len)
 {
-	while(Len > 0)
-	{
-		//1. wait until TXE is set
-		while(SPI_GetFlagStatus(pSPIx, (1 << 1))  == RESET );
 
-		//2. check the DFF bit in CR1
-		if( (pSPIx->CR1 & ( 1 << 11) ) )
-		{
-			//16 bit DFF
-			//1. load the data in to the DR
-			pSPIx->DR =   *((uint16_t*)pTxBuffer);
-			Len--;
-			Len--;
-			(uint16_t*)pTxBuffer++;
-		}else
-		{
-			//8 bit DFF
-			pSPIx->DR =   *pTxBuffer;
-			Len--;
-			pTxBuffer++;
-		}
-	}
+    while(Len > 0)
+    {
+        /* Wait until TXE is set */
+        while(SPI_GetFlagStatus(pSPIx, (1 << 1)) == RESET);
+
+        if(((pSPIx->CR2 >> 8) & 0xF) == SPI_DS_16BITS)
+        {
+            /* Ensure enough data */
+            if(Len < 2)
+                break;
+
+            /* Load 16-bit data */
+            pSPIx->DR = *((uint16_t *)pTxBuffer);
+
+            pTxBuffer += 2;
+            Len -= 2;
+        }
+        else /* 8-bit */
+        {
+            pSPIx->DR = *pTxBuffer;
+            pTxBuffer++;
+            Len--;
+        }
+    }
+
+    /* Wait until SPI not busy */
+    while(pSPIx->SR & (1 << 7)); // BSY
 }
+
 
 
 
 void SPI_ReceiveData(SPI_Regs_t *pSPIx, uint8_t *pRxBuffer, uint32_t Len)
 {
-	while(Len > 0)
-		{
-			//1. wait until RXNE is set
-			while(SPI_GetFlagStatus(pSPIx,(1 << 0))  == (uint8_t)RESET );
 
-			//2. check the DFF bit in CR1
-			if( (pSPIx->CR1 & ( 1 << 11) ) )
-			{
-				//16 bit DFF
-				//1. load the data from DR to Rxbuffer address
-				 *((uint16_t*)pRxBuffer) = pSPIx->DR ;
-				Len--;
-				Len--;
-				(uint16_t*)pRxBuffer++;
-			}
-			else
-			{
-				//8 bit DFF
-				*(pRxBuffer) = pSPIx->DR ;
-				Len--;
-				pRxBuffer++;
-			}
-		}
+    while(Len > 0)
+    {
+        /* Wait until RXNE is set */
+        while(SPI_GetFlagStatus(pSPIx, (1 << 0)) == RESET);
+
+        if(((pSPIx->CR2 >> 8) & 0xF) == SPI_DS_16BITS)
+        {
+            /* Ensure enough space */
+            if(Len < 2)
+                break;
+
+            *((uint16_t *)pRxBuffer) = (uint16_t)pSPIx->DR;
+
+            pRxBuffer += 2;
+            Len -= 2;
+        }
+        else /* 8-bit */
+        {
+            *pRxBuffer = (uint8_t)pSPIx->DR;
+
+            pRxBuffer++;
+            Len--;
+        }
+    }
+
+    /* Wait until SPI not busy */
+    while(pSPIx->SR & (1 << 7)); // BSY
 }
+
 
 
 

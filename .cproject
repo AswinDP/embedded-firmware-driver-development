@@ -83,7 +83,7 @@
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Driver"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Inc"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="RTOS_Source"/>
-						<entry excluding="010_GPIO_EXTI_Test.c|009_7SegmentDriveByUSART.c|007_UltrasonicSensor.c|008_Delay_Test.c|004_USART_Test.c|006_Timer_Test.c|005_RTOS_Test.c|002_Spi_SendData.c|003_I2C_Test.c|001_Gpio_Toggle.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src"/>
+						<entry excluding="010_GPIO_EXTI_Test.c|009_7SegmentDriveByUSART.c|007_UltrasonicSensor.c|008_Delay_Test.c|004_USART_Test.c|006_Timer_Test.c|005_RTOS_Test.c|003_I2C_Test.c|001_Gpio_Toggle.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Startup"/>
 					</sourceEntries>
 				</configuration>
@@ -158,7 +158,7 @@
 					<sourceEntries>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Inc"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="RTOS_Source"/>
-						<entry excluding="010_GPIO_EXTI_Test.c|009_7SegmentDriveByUSART.c|007_UltrasonicSensor.c|008_Delay_Test.c|004_USART_Test.c|006_Timer_Test.c|005_RTOS_Test.c|002_Spi_SendData.c|003_I2C_Test.c|001_Gpio_Toggle.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src"/>
+						<entry excluding="010_GPIO_EXTI_Test.c|009_7SegmentDriveByUSART.c|007_UltrasonicSensor.c|008_Delay_Test.c|004_USART_Test.c|006_Timer_Test.c|005_RTOS_Test.c|003_I2C_Test.c|001_Gpio_Toggle.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Startup"/>
 					</sourceEntries>
 				</configuration>

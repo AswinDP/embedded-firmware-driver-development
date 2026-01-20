@@ -61,18 +61,18 @@ typedef struct{
 
 
 //SPI DS
-#define SPI_DS_4BITS						3
-#define SPI_DS_5BITS						4
-#define SPI_DS_6BITS						5
-#define SPI_DS_7BITS						6
+//#define SPI_DS_4BITS						3
+//#define SPI_DS_5BITS						4
+//#define SPI_DS_6BITS						5
+//#define SPI_DS_7BITS						6
 #define SPI_DS_8BITS						7
-#define SPI_DS_9BITS						8
-#define SPI_DS_10BITS						9
-#define SPI_DS_11BITS						10
-#define SPI_DS_12BITS						11
-#define SPI_DS_13BITS						12
-#define SPI_DS_14BITS						13
-#define SPI_DS_15BITS						14
+//#define SPI_DS_9BITS						8
+//#define SPI_DS_10BITS						9
+//#define SPI_DS_11BITS						10
+//#define SPI_DS_12BITS						11
+//#define SPI_DS_13BITS						12
+//#define SPI_DS_14BITS						13
+//#define SPI_DS_15BITS						14
 #define SPI_DS_16BITS						15
 
 
