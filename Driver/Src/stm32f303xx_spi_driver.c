@@ -65,20 +65,28 @@ void SPI_Init(SPI_Handle_t *pSPIHandle)
 
 	uint32_t tempreg = 0;
 
-	//1. configure the device mode
-	tempreg |= pSPIHandle->SPIConfig.SPI_DeviceMode << 2 ;
+	//a. Configure the spi serial clock speed (baud rate)
+	tempreg |= pSPIHandle->SPIConfig.SPI_SclkSpeed << 3;
 
-	//2. Configure the bus config
+	//b. configure the CPOL and CPHA
+	tempreg |= pSPIHandle->SPIConfig.SPI_CPOL << 1;
+	tempreg |= pSPIHandle->SPIConfig.SPI_CPHA << 0;
+
+	//c. Configure the bus config
 	if(pSPIHandle->SPIConfig.SPI_BusConfig == SPI_BUS_CONFIG_FD)
 	{
 		//bidi mode should be cleared
+		tempreg &= ~( 1 << 10);
 		tempreg &= ~( 1 << 15);
 
-	}else if (pSPIHandle->SPIConfig.SPI_BusConfig == SPI_BUS_CONFIG_HD)
+	}
+	else if (pSPIHandle->SPIConfig.SPI_BusConfig == SPI_BUS_CONFIG_HD)
 	{
 		//bidi mode should be set
+		tempreg &= ~(1 << 10);   // RXONLY = 0
 		tempreg |= ( 1 << 15);
-	}else if (pSPIHandle->SPIConfig.SPI_BusConfig == SPI_BUS_CONFIG_Srx)
+	}
+	else if (pSPIHandle->SPIConfig.SPI_BusConfig == SPI_BUS_CONFIG_Srx)
 	{
 		//BIDI mode should be cleared
 		tempreg &= ~( 1 << 15);
@@ -86,23 +94,66 @@ void SPI_Init(SPI_Handle_t *pSPIHandle)
 		tempreg |= ( 1 << 10);
 	}
 
-	// 3. Configure the spi serial clock speed (baud rate)
-	tempreg |= pSPIHandle->SPIConfig.SPI_SclkSpeed << 3;
+	//d. Configure LSB
+	tempreg &= ~(1 << 7);
 
-	//4.  Configure the DFF
-	tempreg |= pSPIHandle->SPIConfig.SPI_CRCL << 11;
+	//e.  Configure the CRCEN
+	if(pSPIHandle->SPIConfig.SPI_CRCEN == SPI_CRCDIS)
+	{
+		tempreg &= ~(1 << 13);
+	}
+	else if(pSPIHandle->SPIConfig.SPI_CRCEN == SPI_CRCEN_8BITS)
+	{
+		tempreg |= (1 << 13);
+		tempreg &= ~(1 << 11);
+	}
+	else
+	{
+		tempreg |= (1 << 13);
+		tempreg |= (1 << 11);
+	}
 
-	//5. configure the CPOL
-	tempreg |= pSPIHandle->SPIConfig.SPI_CPOL << 1;
+	// f. Configure SSM and SSI
+	tempreg |= (pSPIHandle->SPIConfig.SPI_SSM << 9);
 
-	//6 . configure the CPHA
-	tempreg |= pSPIHandle->SPIConfig.SPI_CPHA << 0;
+	if(pSPIHandle->SPIConfig.SPI_SSM == ENABLE)
+	{
+	    /* Required in master mode to avoid MODF */
+	    tempreg |= (1 << 8);   // SSI = 1
+	}
+	else
+	{
+	    /* Hardware NSS management */
+	    tempreg &= ~(1 << 8);  // SSI = 0 (clean state)
+	}
 
-	tempreg |= pSPIHandle->SPIConfig.SPI_SSM << 9;
+	//g. configure the device mode
+	tempreg |= pSPIHandle->SPIConfig.SPI_DeviceMode << 2 ;
 
 	pSPIHandle->pSPIx->CR1 = tempreg;
 
 
+	//Next lets configure the SPI_CR2 register
+
+	tempreg = 0;
+
+	/* Disable SPI before configuring CR2 */
+	pSPIHandle->pSPIx->CR1 &= ~(1 << 6); // SPE = 0
+
+	/* Data size */
+	tempreg |= (pSPIHandle->SPIConfig.SPI_DS << 8);
+
+	//SSOE is not handled as of now!
+
+	/* RX FIFO threshold */
+	if(pSPIHandle->SPIConfig.SPI_DS <= SPI_DS_8BITS)
+	{
+	    tempreg |= (1 << 13); // FRXTH = 1
+	}
+
+	pSPIHandle->pSPIx->CR2 = tempreg;
+
+	pSPIHandle->pSPIx->CR1 |= (1 << 6);
 
 }
 

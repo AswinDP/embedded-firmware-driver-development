@@ -15,10 +15,11 @@ typedef struct{
 	uint8_t SPI_DeviceMode;
 	uint8_t SPI_BusConfig;
 	uint8_t SPI_SclkSpeed;
-	uint8_t SPI_CRCL;
+	uint8_t SPI_CRCEN;
 	uint8_t SPI_CPOL;
 	uint8_t SPI_CPHA;
 	uint8_t SPI_SSM;
+	uint8_t SPI_DS;
 
 }SPI_Config_t;
 
@@ -53,9 +54,26 @@ typedef struct{
 #define SPI_SCLK_SPEED_DIV256				7
 
 
-//SPI DFF
-#define SPI_CRCL_8BITS						0
-#define SPI_CRCL_16BITS						1
+//SPI CRCEN
+#define SPI_CRCDIS							0
+#define SPI_CRCEN_8BITS						1
+#define SPI_CRCEN_16BITS					2
+
+
+//SPI DS
+#define SPI_DS_4BITS						3
+#define SPI_DS_5BITS						4
+#define SPI_DS_6BITS						5
+#define SPI_DS_7BITS						6
+#define SPI_DS_8BITS						7
+#define SPI_DS_9BITS						8
+#define SPI_DS_10BITS						9
+#define SPI_DS_11BITS						10
+#define SPI_DS_12BITS						11
+#define SPI_DS_13BITS						12
+#define SPI_DS_14BITS						13
+#define SPI_DS_15BITS						14
+#define SPI_DS_16BITS						15
 
 
 //SPI CPOL
