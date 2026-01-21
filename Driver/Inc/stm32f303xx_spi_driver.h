@@ -28,6 +28,12 @@ typedef struct{
 
 	SPI_Regs_t *pSPIx;
 	SPI_Config_t SPIConfig;
+	uint8_t *pTxBuffer;
+	uint8_t *pRxBuffer;
+	uint32_t TxLen;
+	uint32_t RxLen;
+	uint8_t TxState;
+	uint8_t RxState;
 
 }SPI_Handle_t;
 
@@ -91,6 +97,12 @@ typedef struct{
 #define SPI_SSM_EN							1
 
 
+//SPI States
+#define SPI_READY							0
+#define SPI_BUSY_RX							1
+#define SPI_BUSY_TX							2
+
+
 //API Prototypes
 
 void SPI_Init(SPI_Handle_t *pSPIHandle);
@@ -99,6 +111,9 @@ void SPI_ClkControl(SPI_Regs_t *pSPIx, uint8_t EnorDi);
 
 void SPI_SendData(SPI_Regs_t *pSPIx, uint8_t *pTxBuffer, uint32_t Len);
 void SPI_ReceiveData(SPI_Regs_t *pSPIx, uint8_t *pRxBuffer, uint32_t Len);
+
+uint8_t SPI_SendDataIT(SPI_Handle_t *pSPIHandle, uint8_t *pTxBuffer, uint32_t Len);
+uint8_t SPI_ReceiveDataIT(SPI_Handle_t *pSPIHandle, uint8_t *pRxBuffer, uint32_t Len);
 
 void SPI_IRQConfig(uint8_t IRQNumber, uint8_t IRQPriority, uint8_t EnorDi);
 void SPI_IRQHandling(SPI_Handle_t *pHandle);

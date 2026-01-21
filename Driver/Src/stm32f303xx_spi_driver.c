@@ -155,6 +155,9 @@ void SPI_Init(SPI_Handle_t *pSPIHandle)
 
 	pSPIHandle->pSPIx->CR1 |= (1 << 6);
 
+    pSPIHandle->TxState = SPI_READY;
+    pSPIHandle->RxState = SPI_READY;
+
 }
 
 
@@ -250,7 +253,96 @@ void SPI_ReceiveData(SPI_Regs_t *pSPIx, uint8_t *pRxBuffer, uint32_t Len)
 
 
 
+uint8_t SPI_SendDataIT(SPI_Handle_t *pSPIHandle, uint8_t *pTxBuffer, uint32_t Len)
+{
+	if(pSPIHandle->TxState != SPI_BUSY_TX)
+	{
+		pSPIHandle->pTxBuffer = pTxBuffer;
+		pSPIHandle->TxLen     = Len;
+		pSPIHandle->TxState   = SPI_BUSY_TX;
 
+		/* Enable TXE interrupt */
+		pSPIHandle->pSPIx->CR2 |= (1 << 7); // TXEIE
+
+		return 0;
+	}
+
+	return pSPIHandle->TxState;
+}
+
+
+
+uint8_t SPI_ReceiveDataIT(SPI_Handle_t *pSPIHandle, uint8_t *pRxBuffer, uint32_t Len)
+{
+	if(pSPIHandle->RxState != SPI_BUSY_RX)
+	{
+		pSPIHandle->pRxBuffer = pRxBuffer;
+		pSPIHandle->RxLen     = Len;
+		pSPIHandle->RxState   = SPI_BUSY_RX;
+
+		/* Enable RXNE interrupt */
+		pSPIHandle->pSPIx->CR2 |= (1 << 6); // RXNEIE
+
+		return 0;
+	}
+
+	return pSPIHandle->RxState;
+}
+
+
+
+void SPI_IRQHandling(SPI_Handle_t *pHandle)
+{
+	uint32_t temp1, temp2;
+
+	/* Read status register and control register */
+	temp1 = pHandle->pSPIx->SR;
+	temp2 = pHandle->pSPIx->CR2;
+
+	/* ---------------- TXE INTERRUPT ---------------- */
+	if ((temp1 & (1 << 1)) && (temp2 & (1 << 7)))
+	{
+		/* TXE is set and TXEIE enabled */
+
+		if (pHandle->TxLen > 0)
+		{
+			/* Send 8-bit data */
+			*(volatile uint8_t *)&pHandle->pSPIx->DR =
+					*(pHandle->pTxBuffer);
+
+			pHandle->pTxBuffer++;
+			pHandle->TxLen--;
+		}
+		else
+		{
+			/* Transmission complete */
+			pHandle->pSPIx->CR2 &= ~(1 << 7); // Disable TXEIE
+			pHandle->TxState = SPI_READY;
+		}
+	}
+
+	/* ---------------- RXNE INTERRUPT ---------------- */
+	if ((temp1 & (1 << 0)) && (temp2 & (1 << 6)))
+	{
+		/* RXNE is set and RXNEIE enabled */
+
+		if (pHandle->RxLen > 0)
+		{
+			/* Receive 8-bit data */
+			*(pHandle->pRxBuffer) =
+					*(volatile uint8_t *)&pHandle->pSPIx->DR;
+
+			pHandle->pRxBuffer++;
+			pHandle->RxLen--;
+		}
+		else
+		{
+			/* Reception complete */
+			pHandle->pSPIx->CR2 &= ~(1 << 6); // Disable RXNEIE
+			pHandle->RxState = SPI_READY;
+		}
+	}
+}
 
 
 
