@@ -31,7 +31,13 @@ void delay_ms(uint32_t ms)
 int main()
 {
 	GPIOA_REG_RST();
-	USART1_REG_RST();
+	GPIOB_REG_RST();
+	SPI2_REG_RST();
+
+	GPIOA_CLK_EN();
+	GPIOB_CLK_EN();
+	SPI2_CLK_EN();
+
 
 	GPIO_Handle_t GPIO_SPI1_CS;
 
@@ -46,8 +52,8 @@ int main()
 
 	GPIO_Handle_t GPIO_SPI1_SCLK;
 
-	GPIO_SPI1_SCLK.pGPIOx = GPIOA;
-	GPIO_SPI1_SCLK.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN5;
+	GPIO_SPI1_SCLK.pGPIOx = GPIOB;
+	GPIO_SPI1_SCLK.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN13;
 	GPIO_SPI1_SCLK.GPIO_PinConfig.GPIO_PinMode = GPIO_MODE_ALTFN;
 	GPIO_SPI1_SCLK.GPIO_PinConfig.GPIO_PinSpeed = GPIO_SPEED_FAST;
 	GPIO_SPI1_SCLK.GPIO_PinConfig.GPIO_PinOPType = GPIO_OP_TYPE_PP;
@@ -58,8 +64,8 @@ int main()
 
 	GPIO_Handle_t GPIO_SPI1_MISO;
 
-	GPIO_SPI1_MISO.pGPIOx = GPIOA;
-	GPIO_SPI1_MISO.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN6;
+	GPIO_SPI1_MISO.pGPIOx = GPIOB;
+	GPIO_SPI1_MISO.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN14;
 	GPIO_SPI1_MISO.GPIO_PinConfig.GPIO_PinMode = GPIO_MODE_ALTFN;
 	GPIO_SPI1_MISO.GPIO_PinConfig.GPIO_PinSpeed = GPIO_SPEED_FAST;
 	GPIO_SPI1_MISO.GPIO_PinConfig.GPIO_PinOPType = GPIO_OP_TYPE_PP;
@@ -70,8 +76,8 @@ int main()
 
 	GPIO_Handle_t GPIO_SPI1_MOSI;
 
-	GPIO_SPI1_MOSI.pGPIOx = GPIOA;
-	GPIO_SPI1_MOSI.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN7;
+	GPIO_SPI1_MOSI.pGPIOx = GPIOB;
+	GPIO_SPI1_MOSI.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN15;
 	GPIO_SPI1_MOSI.GPIO_PinConfig.GPIO_PinMode = GPIO_MODE_ALTFN;
 	GPIO_SPI1_MOSI.GPIO_PinConfig.GPIO_PinSpeed = GPIO_SPEED_FAST;
 	GPIO_SPI1_MOSI.GPIO_PinConfig.GPIO_PinOPType = GPIO_OP_TYPE_PP;
@@ -85,45 +91,68 @@ int main()
 	GPIO_Init(&GPIO_SPI1_MOSI);
 
 
+	GPIO_Handle_t GpioLed;
 
-	SPI_Handle_t SPI1TEST;
+	GpioLed.pGPIOx = GPIOA;
+	GpioLed.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN5;
+	GpioLed.GPIO_PinConfig.GPIO_PinMode = GPIO_MODE_OUT;
+	GpioLed.GPIO_PinConfig.GPIO_PinSpeed = GPIO_SPEED_LOW;
+	GpioLed.GPIO_PinConfig.GPIO_PinOPType = GPIO_OP_TYPE_PP;
+	GpioLed.GPIO_PinConfig.GPIO_PinPuPdControl = GPIO_NO_PUPD;
 
-	SPI1TEST.pSPIx = SPI1;
-	SPI1TEST.SPIConfig.SPI_BusConfig = SPI_BUS_CONFIG_FD;
-	SPI1TEST.SPIConfig.SPI_CPHA = SPI_CPHA_LOW;
-	SPI1TEST.SPIConfig.SPI_CPOL = SPI_CPOL_LOW;
-	SPI1TEST.SPIConfig.SPI_CRCEN = SPI_CRCDIS;
-	SPI1TEST.SPIConfig.SPI_DS = SPI_DS_8BITS;
-	SPI1TEST.SPIConfig.SPI_DeviceMode = SPI_DEVICE_MODE_MASTER;
-	SPI1TEST.SPIConfig.SPI_SSM = SPI_SSM_EN;
-	SPI1TEST.SPIConfig.SPI_SclkSpeed = SPI_SCLK_SPEED_DIV8;
+	GPIO_Init(&GpioLed);
 
 
-	SPI_Init(&SPI1TEST);
+	SPI_Handle_t SPI2TEST;
+
+	SPI2TEST.pSPIx = SPI2;
+	SPI2TEST.SPIConfig.SPI_BusConfig = SPI_BUS_CONFIG_FD;
+	SPI2TEST.SPIConfig.SPI_CPHA = SPI_CPHA_LOW;
+	SPI2TEST.SPIConfig.SPI_CPOL = SPI_CPOL_LOW;
+	SPI2TEST.SPIConfig.SPI_CRCEN = SPI_CRCDIS;
+	SPI2TEST.SPIConfig.SPI_DS = SPI_DS_8BITS;
+	SPI2TEST.SPIConfig.SPI_DeviceMode = SPI_DEVICE_MODE_MASTER;
+	SPI2TEST.SPIConfig.SPI_SSM = SPI_SSM_EN;
+	SPI2TEST.SPIConfig.SPI_SclkSpeed = SPI_SCLK_SPEED_DIV8;
+
+
+	SPI_Init(&SPI2TEST);
 
 
 
-	uint8_t txBuf[4] = {0xA5, 0x5A, 0xAA, 0x55};
+	uint8_t txBuf[4] = {0x01, 0x02, 0x03, 0x04};
 	uint8_t rxBuf[4];
 
 	while (1)
 	{
-	    /* CS LOW → select ESP32 */
+	    // CS LOW
 	    GPIO_WritePin(GPIOA, GPIO_PIN4, GPIO_PIN_RESET);
 
-	    /* Send data to ESP32 */
-	    SPI_SendData(SPI1, txBuf, sizeof(txBuf));
+	    // Phase 1: Send command/data to ESP32
+	    SPI_SendData(SPI2, txBuf, 4);
 
-	    /* Receive data from ESP32 */
-	    SPI_ReceiveData(SPI1, rxBuf, sizeof(rxBuf));
+	    // Phase 2: Receive response from ESP32
+	    SPI_ReceiveData(SPI2, rxBuf, 4);
 
-	    /* CS HIGH → deselect ESP32 */
+	    // CS HIGH
 	    GPIO_WritePin(GPIOA, GPIO_PIN4, GPIO_PIN_SET);
 
-	    delay_ms(500);
+	    // Blink LED based on received value (1–5)
+	    uint8_t blinkCount = rxBuf[0];
+
+	    if (blinkCount >= 1 && blinkCount <= 5)
+	    {
+	        for (uint8_t i = 0; i < blinkCount; i++)
+	        {
+	            GPIO_WritePin(GPIOA, GPIO_PIN5, GPIO_PIN_SET);
+	            delay_ms(200);
+	            GPIO_WritePin(GPIOA, GPIO_PIN5, GPIO_PIN_RESET);
+	            delay_ms(200);
+	        }
+	    }
+
+	    delay_ms(1000);
 	}
-
-
 
 
 }

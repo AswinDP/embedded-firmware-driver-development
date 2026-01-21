@@ -346,5 +346,32 @@ void SPI_IRQHandling(SPI_Handle_t *pHandle)
 
 
 
+void SPI_SendReceiveData(SPI_Regs_t *pSPIx,
+                         uint8_t *pTxBuffer,
+                         uint8_t *pRxBuffer,
+                         uint32_t len)
+{
+    while (len > 0)
+    {
+        /* 1. Wait until TX buffer empty */
+        while (!(pSPIx->SR & (1 << 1)));
+
+        /* 2. Write data (8-bit safe access) */
+        *((__vo uint8_t *)&pSPIx->DR) = *pTxBuffer;
+        pTxBuffer++;
+
+        /* 3. Wait until RX buffer not empty */
+        while (!(pSPIx->SR & (1 << 0)));
+
+        /* 4. Read received data */
+        *pRxBuffer = *((__vo uint8_t *)&pSPIx->DR);
+        pRxBuffer++;
+
+        len--;
+    }
+
+    /* 5. Wait until SPI not busy */
+    while (pSPIx->SR & (1 << 7));
+}
 
 

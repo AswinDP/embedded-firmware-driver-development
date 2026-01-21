@@ -119,6 +119,7 @@ void SPI_IRQConfig(uint8_t IRQNumber, uint8_t IRQPriority, uint8_t EnorDi);
 void SPI_IRQHandling(SPI_Handle_t *pHandle);
 
 
+void SPI_SendReceiveData(SPI_Regs_t *pSPIx, uint8_t *pTxBuffer, uint8_t *pRxBuffer, uint32_t len);
 
 
 

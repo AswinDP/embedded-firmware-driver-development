@@ -686,6 +686,13 @@ typedef struct
 #define GPIOH_REG_RST()				do {( RCC -> AHBRSTR |= (1 << 16));  ( RCC -> AHBRSTR &= ~(1 << 16));} while(0)
 
 
+//SPI Reset Macro
+#define SPI1_REG_RST()				do {( RCC -> APB2RSTR |= (1 << 12));  ( RCC -> APB2RSTR &= ~(1 << 12));} while(0)
+#define SPI2_REG_RST()				do {( RCC -> APB1RSTR |= (1 << 14));  ( RCC -> APB1RSTR &= ~(1 << 14));} while(0)
+#define SPI3_REG_RST()				do {( RCC -> APB1RSTR |= (1 << 15));  ( RCC -> APB1RSTR &= ~(1 << 15));} while(0)
+#define SPI4_REG_RST()				do {( RCC -> APB2RSTR |= (1 << 15));  ( RCC -> APB2RSTR &= ~(1 << 15));} while(0)
+
+
 //I2C Reset Macro
 #define I2C1_REG_RST()				do {( RCC -> APB1RSTR |= (1 << 21));  ( RCC -> APB1RSTR &= ~(1 << 21));} while(0)
 #define I2C2_REG_RST()				do {( RCC -> APB1RSTR |= (1 << 22));  ( RCC -> APB1RSTR &= ~(1 << 22));} while(0)
