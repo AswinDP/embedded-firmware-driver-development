@@ -6,6 +6,18 @@
  */
 
 
+/*
+ * NOTE: EDUCATIONAL USE ONLY - INTENTIONAL DESIGN FLAW
+ *
+ * This code purposely calls blocking delays (delay_ms) inside the Interrupt
+ * Service Routine (ISR). In real-world applications, this is bad practice
+ * as it freezes the main loop and starves other tasks.
+ *
+ * However, this design is used here specifically to demonstrate "NVIC Preemption."
+ * By holding the CPU in an ISR for a long duration, we can visually observe
+ * a higher-priority interrupt interrupting a lower-priority one.
+ */
+
 #include "stm32f303xx.h"
 
 void vApplicationStackOverflowHook(void)			//Just for RTOS
@@ -13,23 +25,48 @@ void vApplicationStackOverflowHook(void)			//Just for RTOS
     while (1);
 }
 
-/* Global timer handle for delay */
-GP1_TIM_Handle_t TIM2_DE;
+void delay_ms(uint32_t ms)
+{
+    volatile uint32_t count;
 
-volatile uint8_t led0_req = 0;
-volatile uint8_t led1_req = 0;
-volatile uint8_t led2_req = 0;
+    while (ms--)
+    {
+        count = 1140;   // calibrated for YOUR system
+        while (count--);
+    }
+}
 
+
+void Handle_LED0(void)
+{
+	GPIO_WritePin(GPIOB, GPIO_PIN0, ENABLE);
+	delay_ms(10000);
+	GPIO_WritePin(GPIOB, GPIO_PIN0, DISABLE);
+}
+
+void Handle_LED1(void)
+{
+	GPIO_WritePin(GPIOB, GPIO_PIN1, ENABLE);
+	delay_ms(5000);
+	GPIO_WritePin(GPIOB, GPIO_PIN1, DISABLE);
+}
+
+void Handle_LED2(void)
+{
+	GPIO_WritePin(GPIOB, GPIO_PIN2, ENABLE);
+	delay_ms(2000);
+	GPIO_WritePin(GPIOB, GPIO_PIN2, DISABLE);
+}
 
 
 void EXTI_Callback(uint8_t exti_line)
 {
     if(exti_line == GPIO_PIN0)
-        led0_req = 1;
+    	Handle_LED0();
     else if(exti_line == GPIO_PIN1)
-        led1_req = 1;
+    	Handle_LED1();
     else if(exti_line == GPIO_PIN2)
-        led2_req = 1;
+    	Handle_LED2();
 }
 
 
@@ -93,17 +130,6 @@ int main(void)
 	GPIO_Init(&GPIOBTN2);
 
 
-    /* ---------- TIM2 Delay Timer ---------- */
-    TIM2_DE.pGP1TIMx = TIM2;
-    TIM2_DE.Channel = GP1_TIM_CHANNEL_1;   // channel irrelevant for delay
-    TIM2_DE.GP1_TIM_Config.GP1TIM_Prescaler = 7;      // 8 MHz / (7+1) = 1 MHz
-    TIM2_DE.GP1_TIM_Config.GP1TIM_AutoReload = 0xFFFF;
-    TIM2_DE.GP1_TIM_Config.GP1TIM_CounterMode = GP1TIM_COUNTMODE_UP;
-    TIM2_DE.GP1_TIM_Config.GP1TIM_ClockDivision = GP1TIM_CKD_1;
-
-    GP1TIM_Init(&TIM2_DE);
-
-
 
 	NVIC_SetPriority(EXTI0_IRQn, 3);
 	NVIC_SetPriority(EXTI1_IRQn, 2);
@@ -115,29 +141,7 @@ int main(void)
 
 	while(1)
 	{
-	    if(led0_req)
-	    {
-	        led0_req = 0;
-	        GPIO_WritePin(GPIOB, GPIO_PIN0, ENABLE);
-	        GP1TIM_Delay_ms(&TIM2_DE, 10000);
-	        GPIO_WritePin(GPIOB, GPIO_PIN0, DISABLE);
-	    }
 
-	    if(led1_req)
-	    {
-	        led1_req = 0;
-	        GPIO_WritePin(GPIOB, GPIO_PIN1, ENABLE);
-	        GP1TIM_Delay_ms(&TIM2_DE, 5000);
-	        GPIO_WritePin(GPIOB, GPIO_PIN1, DISABLE);
-	    }
-
-	    if(led2_req)
-	    {
-	        led2_req = 0;
-	        GPIO_WritePin(GPIOB, GPIO_PIN2, ENABLE);
-	        GP1TIM_Delay_ms(&TIM2_DE, 2000);
-	        GPIO_WritePin(GPIOB, GPIO_PIN2, DISABLE);
-	    }
 	}
 
 
