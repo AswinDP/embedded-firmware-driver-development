@@ -9,6 +9,8 @@
 /*
  * NOTE: EDUCATIONAL USE ONLY - INTENTIONAL DESIGN FLAW
  *
+ * I Know ISR must be short enough! But my intention is to visualise NVIC Preemption
+ *
  * This code purposely calls blocking delays (delay_ms) inside the Interrupt
  * Service Routine (ISR). In real-world applications, this is bad practice
  * as it freezes the main loop and starves other tasks.

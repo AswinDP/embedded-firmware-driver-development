@@ -300,6 +300,68 @@ typedef struct
 } SCB_Regs_t;
 
 
+//Structure for CAN registers
+
+typedef struct
+{
+    __vo uint32_t TIR;
+    __vo uint32_t TDTR;
+    __vo uint32_t TDLR;
+    __vo uint32_t TDHR;
+} CAN_TxMailbox_t;
+
+typedef struct
+{
+	__vo uint32_t RIR;    // Identifier register
+	__vo uint32_t RDTR;   // DLC + filter match index
+	__vo uint32_t RDLR;   // Data low
+	__vo uint32_t RDHR;   // Data high
+} CAN_RxMailbox_t;
+
+typedef struct
+{
+	__vo uint32_t FR1;
+	__vo uint32_t FR2;
+} CAN_FilterBank_t;
+
+
+typedef struct
+{
+    /* 0x000: Control and status register*/
+    __vo uint32_t MCR;        			// 0x000 CANMCR
+    __vo uint32_t MSR;        			// 0x004 CANMSR
+    __vo uint32_t TSR;        			// 0x008 CANTSR
+    __vo uint32_t RF0R;       			// 0x00C CANRF0R
+    __vo uint32_t RF1R;       			// 0x010 CANRF1R
+    __vo uint32_t IER;        			// 0x014 CANIER
+    __vo uint32_t ESR;        			// 0x018 CANESR
+    __vo uint32_t BTR;        			// 0x01C CANBTR
+
+    /* 0x180: Tx mailboxes (3 x 4 regs); Rx FIFO mailboxes (2 x 4 regs) */
+    __vo uint32_t RESERVED0[0x160/4];   // 0x020..0x17F
+    CAN_TxMailbox_t TX[3];				// 0x180: TX mailboxes (3)
+    CAN_RxMailbox_t RX[2];				// 0x1B0: RX mailboxes (2 FIFOs)
+    __vo uint32_t RESERVED1[0x30/4];    // 0x1D0..0x1FF
+
+    /* 0x200: Filter registers */
+    __vo uint32_t FMR;        			// 0x200 CANFMR
+    __vo uint32_t FM1R;       			// 0x204 CANFM1R
+    __vo uint32_t RESERVED2;  			// 0x208 Reserved
+    __vo uint32_t FS1R;       			// 0x20C CANFS1R
+    __vo uint32_t RESERVED3;  			// 0x210 Reserved
+    __vo uint32_t FFA1R;      			// 0x214 CANFFA1R
+    __vo uint32_t RESERVED4;  			// 0x218 Reserved
+    __vo uint32_t FA1R;       			// 0x21C CANFA1R
+    __vo uint32_t RESERVED5;  			// 0x220 Reserved
+    __vo uint32_t RESERVED6[0x1C/4];   	// 0x224..0x23F
+
+    /* 0x240: Filter bank registers (14 banks x 2 regs = 28 regs) */
+    CAN_FilterBank_t FILTER[14];
+
+} CAN_Regs_t;
+
+
+
 //NVIC Peripheral definitions
 #define NVIC						((NVIC_Regs_t*)NVIC_BASEADDR)
 
@@ -623,6 +685,9 @@ typedef struct
 #define SYSCFG_CLK_EN()				( RCC -> APB2ENR |= (1 << 0))
 
 
+//Clock Enable Macros for CAN
+#define CAN_CLK_EN()				( RCC -> APB1ENR |= (1 << 25))
+
 //Clock Disable Macros for GPIOx
 #define GPIOA_CLK_DI()				( RCC -> AHBENR &= ~(1 << 17))
 #define GPIOB_CLK_DI()				( RCC -> AHBENR &= ~(1 << 18))
@@ -675,6 +740,9 @@ typedef struct
 #define SYSCFG_CLK_DI()				( RCC -> APB2ENR &= ~(1 << 0))
 
 
+//Clock Disable Macros for CAN
+#define CAN_CLK_DI()				( RCC -> APB1ENR &= ~(1 << 25))
+
 //Gpio Reset Macro
 #define GPIOA_REG_RST()				do {( RCC -> AHBRSTR |= (1 << 17));  ( RCC -> AHBRSTR &= ~(1 << 17));} while(0)
 #define GPIOB_REG_RST()				do {( RCC -> AHBRSTR |= (1 << 18));  ( RCC -> AHBRSTR &= ~(1 << 18));} while(0)
@@ -721,9 +789,12 @@ typedef struct
 #define TIM8_REG_RST()    			do { (RCC->APB2RSTR |=  (1 << 13)); (RCC->APB2RSTR &= ~(1 << 13)); } while(0)
 #define WWDG_REG_RST()    			do { (RCC->APB1RSTR |=  (1 << 11)); (RCC->APB1RSTR &= ~(1 << 11)); } while(0)
 
-//Clock Reset Macros for SYSCFG & EXTI
+//Clock Reset Macro for SYSCFG & EXTI
 #define SYSCFG_CLK_RST()			do {( RCC -> APB2RSTR |= (1 << 0));  ( RCC -> APB2RSTR &= ~(1 << 0));} while(0)
 
+
+//Clock Reset Macro for CAN
+#define CAN_CLK_RST()				do {( RCC -> APB1RSTR |= (1 << 25));  ( RCC -> APB1RSTR &= ~(1 << 25));} while(0)
 
 
 #include "stm32f303xx_gpio_driver.h"
