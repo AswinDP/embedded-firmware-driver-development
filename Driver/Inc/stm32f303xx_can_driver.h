@@ -65,22 +65,21 @@ typedef struct
     uint8_t  IDE;
     uint8_t  RTR;
     uint8_t  DLC;
-    uint32_t TimeStamp;
-    uint32_t FMI;
+    uint16_t TimeStamp;
+    uint8_t  FMI;
 
 } CAN_RxHeader_t;
 
 
 
-typedef struct{
+typedef struct
+{
+    CAN_Regs_t     *pCANx;       // Peripheral base address
+    CAN_Config_t    Init;        // Init configuration
+    CAN_State_t     State;       // Driver state
+    uint32_t        ErrorCode;   // Error tracking
 
-	CAN_Regs_t *pCANx;
-	CAN_Config_t CAN_Config;
-	CAN_FilterConfig_t CAN_FilterConfig;
-	CAN_TxHeader_t CAN_TxMsg;
-	CAN_RxHeader_t CAN_RxMsg;
-
-}CAN_Handle_t;
+} CAN_Handle_t;
 
 
 
@@ -165,6 +164,12 @@ typedef struct{
 #define CAN_RTR_DATA        0U   /* Data Frame */
 #define CAN_RTR_REMOTE      1U   /* Remote Frame */
 
+
+#define CAN_TX_MAILBOX0      0U
+#define CAN_TX_MAILBOX1      1U
+#define CAN_TX_MAILBOX2      2U
+#define CAN_TX_MAILBOX_MAX   3U
+
 /* ===== Transmit Global Time ===== */
 
 #define CAN_TGT_DISABLE     0U
@@ -194,6 +199,67 @@ typedef struct{
 #define CAN_RX_FROM_FIFO0   0U
 #define CAN_RX_FROM_FIFO1   1U
 
+typedef enum
+{
+    CAN_OK = 0,
+    CAN_ERROR,
+    CAN_ERROR_TIMEOUT,
+    CAN_ERROR_INVALID_PARAM,
+    CAN_ERROR_BUSY
 
+} CAN_Status_t;
+
+
+typedef enum
+{
+    CAN_STATE_INIT,
+    CAN_STATE_NORMAL,
+    CAN_STATE_SLEEP
+
+} CAN_State_t;
+
+
+/* ================= Core Control ================= */
+
+CAN_Status_t CAN_Init(CAN_Handle_t *CANx, const CAN_Config_t *pConfig);
+
+CAN_Status_t CAN_DeInit(CAN_Handle_t *CANx);
+
+CAN_Status_t CAN_Start(CAN_Handle_t *CANx);
+
+CAN_Status_t CAN_Stop(CAN_Handle_t *CANx);
+
+CAN_Status_t CAN_RequestSleep(CAN_Handle_t *CANx);
+
+CAN_Status_t CAN_WakeUp(CAN_Handle_t *CANx);
+
+CAN_State_t  CAN_GetState(CAN_Handle_t *CANx);
+
+
+/* ================= Filter Control ================= */
+
+CAN_Status_t CAN_ConfigFilter(CAN_Handle_t *CANx, const CAN_FilterConfig_t *pFilter);
+
+CAN_Status_t CAN_EnableFilter(CAN_Handle_t *CANx, uint8_t filterBank);
+
+CAN_Status_t CAN_DisableFilter(CAN_Handle_t *CANx, uint8_t filterBank);
+
+
+/* ================= Transmission ================= */
+
+CAN_Status_t CAN_AddTxMessage(CAN_Handle_t *CANx, const CAN_TxHeader_t *pHeader, const uint8_t *pData, uint8_t *pMailbox);
+
+uint8_t CAN_IsTxMessagePending(CAN_Handle_t *CANx, uint8_t mailbox);
+
+uint8_t CAN_GetTxMailboxesFreeLevel(CAN_Handle_t *CANx);
+
+CAN_Status_t CAN_AbortTxRequest(CAN_Handle_t *CANx, uint8_t mailbox);
+
+
+/* ================= Reception ================= */
+
+CAN_Status_t CAN_GetRxMessage(CAN_Handle_t *CANx, uint8_t fifo, CAN_RxHeader_t *pHeader, uint8_t *pData);
+
+uint8_t CAN_GetRxFifoFillLevel(CAN_Handle_t *CANx, uint8_t fifo);
 
 #endif /* INC_STM32F303XX_CAN_DRIVER_H_ */
