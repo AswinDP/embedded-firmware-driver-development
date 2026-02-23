@@ -8,6 +8,12 @@
 
 #include "stm32f303xx.h"
 
+void vApplicationStackOverflowHook(void)			//Just for RTOS
+{
+    while (1);
+}
+
+
 
 void delay(int x)
 {
@@ -33,8 +39,23 @@ int main(void)
 	while(1)
 	{
 		GPIO_TogglePin(GPIOA, GPIO_PIN5);
-		delay(200);
+		delay(500);
 	}
-
-
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

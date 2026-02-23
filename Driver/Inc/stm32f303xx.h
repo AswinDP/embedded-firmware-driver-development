@@ -805,5 +805,6 @@ typedef struct
 #include "stm32f303xx_nvic_driver.h"
 #include "stm32f303xx_rcc_driver.h"
 #include "stm32f303xx_exti_driver.h"
+#include "stm32f303xx_can_driver.h"
 
 #endif /* INC_STM32F303XX_H_ */

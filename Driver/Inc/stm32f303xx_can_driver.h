@@ -75,7 +75,7 @@ typedef struct
 typedef struct
 {
     CAN_Regs_t     *pCANx;       // Peripheral base address
-    CAN_Config_t    Init;        // Init configuration
+    CAN_Config_t    Config;        // Init configuration
     CAN_State_t     State;       // Driver state
     uint32_t        ErrorCode;   // Error tracking
 
@@ -221,7 +221,9 @@ typedef enum
 
 /* ================= Core Control ================= */
 
-CAN_Status_t CAN_Init(CAN_Handle_t *CANx, const CAN_Config_t *pConfig);
+void CAN_ClkControl(CAN_Regs_t *pCANx, uint8_t EnorDi);
+
+CAN_Status_t CAN_Init(CAN_Handle_t *CANx);
 
 CAN_Status_t CAN_DeInit(CAN_Handle_t *CANx);
 
