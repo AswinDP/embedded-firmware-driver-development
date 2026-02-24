@@ -212,6 +212,7 @@ typedef enum
 
 typedef enum
 {
+	CAN_STATE_RESET,
     CAN_STATE_INIT,
     CAN_STATE_NORMAL,
     CAN_STATE_SLEEP
@@ -221,19 +222,19 @@ typedef enum
 
 /* ================= Core Control ================= */
 
-void CAN_ClkControl(CAN_Regs_t *pCANx, uint8_t EnorDi);
+void CAN_ClkControl(CAN_Regs_t *pCANx, uint8_t EnorDi);		//To SLEEP Mode if enable
 
-CAN_Status_t CAN_Init(CAN_Handle_t *CANx);
+CAN_Status_t CAN_Init(CAN_Handle_t *CANx);					//To INITIALIZATION Mode
 
-CAN_Status_t CAN_DeInit(CAN_Handle_t *CANx);
+CAN_Status_t CAN_DeInit(CAN_Handle_t *CANx);				//To RESET Mode
 
-CAN_Status_t CAN_Start(CAN_Handle_t *CANx);
+CAN_Status_t CAN_Start(CAN_Handle_t *CANx);					//To NORMAL Mode
 
-CAN_Status_t CAN_Stop(CAN_Handle_t *CANx);
+CAN_Status_t CAN_Stop(CAN_Handle_t *CANx);					//To INITIALIZATION Mode
 
-CAN_Status_t CAN_RequestSleep(CAN_Handle_t *CANx);
+CAN_Status_t CAN_RequestSleep(CAN_Handle_t *CANx);			//To SLEEP Mode
 
-CAN_Status_t CAN_WakeUp(CAN_Handle_t *CANx);
+CAN_Status_t CAN_WakeUp(CAN_Handle_t *CANx);				//To NORMAL Mode
 
 CAN_State_t  CAN_GetState(CAN_Handle_t *CANx);
 
