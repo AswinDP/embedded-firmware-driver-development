@@ -184,10 +184,84 @@ CAN_State_t  CAN_GetState(CAN_Handle_t *CANx)
 }
 
 
+CAN_Status_t CAN_ConfigFilter(CAN_Handle_t *CANx, const CAN_FilterConfig_t *pFilter)
+{
+	CANx->pCANx->FMR |= (1 << 0);							//FINIT (Set)
+	CANx->pCANx->FA1R &= ~(1 << pFilter->FilterBank);		//FACT  (Clear)
+
+	//Filter Mode Configuration
+	if(pFilter->FilterMode == CAN_FILTER_MODE_LIST)
+	{
+		CANx->pCANx->FM1R |= (1 << (pFilter->FilterBank));		//List mode
+	}
+	else
+	{
+		CANx->pCANx->FM1R &= ~(1 << (pFilter->FilterBank));		//Mask mode
+	}
+
+	//Filter Scale and ID/Mask Configuration
+	if(pFilter->FilterScale == CAN_FILTER_SCALE_32BIT)
+	{
+		CANx->pCANx->FS1R |= (1 << (pFilter->FilterBank));		//Single 32Bit mode
+		CANx->pCANx->FILTER[pFilter->FilterBank].FR1 = pFilter->Scale32.ID1;
+		CANx->pCANx->FILTER[pFilter->FilterBank].FR2 = pFilter->Scale32.ID2;
+	}
+	else
+	{
+		CANx->pCANx->FS1R &= ~(1 << (pFilter->FilterBank));		//Dual 16Bit mode
+		CANx->pCANx->FILTER[pFilter->FilterBank].FR1 = ((pFilter->Scale16.ID2 << 16) | pFilter->Scale16.ID1);
+		CANx->pCANx->FILTER[pFilter->FilterBank].FR2 = ((pFilter->Scale16.ID4 << 16) | pFilter->Scale16.ID3);
+	}
+
+	//Filter FIFO Configuration
+	if(pFilter->FIFOAssignment == CAN_FILTER_FIFO1)
+	{
+		CANx->pCANx->FFA1R |= (1 << (pFilter->FilterBank));		//FIFO1 mode
+	}
+	else
+	{
+		CANx->pCANx->FFA1R &= ~(1 << (pFilter->FilterBank));	//FIFO0 mode
+	}
+
+	//CAN Filter Config Completed But not Active yet
+	//Filter is Configured but not live yet and will be made active or disable with separate APIs
+	return CAN_OK;
+}
 
 
+CAN_Status_t CAN_EnableFilter(CAN_Handle_t *CANx, uint8_t filterBank)
+{
+	if(filterBank < 14)
+	{
+		CANx->pCANx->FMR &= ~(1 << 0);				//FINIT
+		CANx->pCANx->FA1R |= (1 << filterBank);		//FACT
+	}
+
+	else
+	{
+		return CAN_ERROR_INVALID_PARAM;
+	}
+
+	return CAN_OK;			//Leave with active mode
+}
 
 
+CAN_Status_t CAN_DisableFilter(CAN_Handle_t *CANx, uint8_t filterBank)
+{
+	if(filterBank < 14)
+	{
+	CANx->pCANx->FMR |= (1 << 0);				//FINIT
+	CANx->pCANx->FA1R &= ~(1 << filterBank);	//FACT
+	CANx->pCANx->FMR &= ~(1 << 0);				//FINIT
+	}
+
+	else
+	{
+		return CAN_ERROR_INVALID_PARAM;
+	}
+
+	return CAN_OK;			//Leave with Initialization mode
+}
 
 
 

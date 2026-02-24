@@ -33,13 +33,29 @@ typedef struct
 
 typedef struct
 {
-    uint8_t  FilterBank;
-    uint8_t  FilterMode;       // Mask or List
-    uint8_t  FilterScale;      // 16-bit or 32-bit
-    uint32_t FilterID;
-    uint32_t FilterMask;
-    uint8_t  FIFOAssignment;
-    uint8_t  Activation;
+    uint8_t FilterBank;
+    uint8_t FilterMode;
+    uint8_t FilterScale;
+
+    union
+    {
+        struct   // 32-bit scale
+        {
+            uint32_t ID1;
+            uint32_t ID2;   // or MASK depending on mode
+        } Scale32;
+
+        struct   // 16-bit scale
+        {
+            uint16_t ID1;
+            uint16_t ID2;
+            uint16_t ID3;
+            uint16_t ID4;
+        } Scale16;
+    };
+
+    uint8_t FIFOAssignment;
+    uint8_t Activation;
 
 } CAN_FilterConfig_t;
 
@@ -132,7 +148,25 @@ typedef struct
 #define CAN_DISABLE     0U
 #define CAN_ENABLE      1U
 
-#define CAN_MAX_FILTER_BANKS     28U
+#define CAN_MAX_FILTER_BANKS     14U
+#define CAN_MAX_FILTER_NUMBERS   56U
+
+/* ===== Filter Bank ===== */
+
+#define CAN_FILTER_BANK_0		0U
+#define CAN_FILTER_BANK_1		1U
+#define CAN_FILTER_BANK_2		2U
+#define CAN_FILTER_BANK_3		3U
+#define CAN_FILTER_BANK_4		4U
+#define CAN_FILTER_BANK_5		5U
+#define CAN_FILTER_BANK_6		6U
+#define CAN_FILTER_BANK_7		7U
+#define CAN_FILTER_BANK_8		8U
+#define CAN_FILTER_BANK_9		9U
+#define CAN_FILTER_BANK_10		10U
+#define CAN_FILTER_BANK_11		11U
+#define CAN_FILTER_BANK_12		12U
+#define CAN_FILTER_BANK_13		13U
 
 /* ===== Filter Mode ===== */
 
