@@ -264,7 +264,87 @@ CAN_Status_t CAN_DisableFilter(CAN_Handle_t *CANx, uint8_t filterBank)
 }
 
 
+CAN_Status_t CAN_AddTxMessage(CAN_Handle_t *CANx, const CAN_TxHeader_t *pHeader, const uint8_t *pData, uint8_t *pMailbox)
+{
+	uint32_t TSR = CANx->pCANx->TSR;
 
+	//Select one empty transmit mailbox
+
+	if(TSR & (1 << 26))
+	{
+		pMailbox = CAN_TX_MAILBOX0;
+	}
+	else if(TSR & (1 << 27))
+	{
+		pMailbox = CAN_TX_MAILBOX1;
+	}
+	else if(TSR & (1 << 28))
+	{
+		pMailbox = CAN_TX_MAILBOX2;
+	}
+	else
+	{
+		return CAN_ERROR_BUSY;
+	}
+
+	// Set up the Identifier, the Data length code (DLC), and the Data then Requestion transmission
+
+	uint32_t temp = 0;
+	uint32_t temp1 = 0;
+
+	//Loading Identifier
+
+	temp |= (pHeader->RTR << 1);			//RTR
+	temp |= (pHeader->IDE << 2);			//IDE
+
+	if(pHeader->IDE == CAN_ID_STD)
+	{
+		temp |= (pHeader->StdId << 21);		//StdID
+	}
+	else
+	{
+		temp |= (pHeader->ExtId << 3);		//ExtID
+	}
+
+	//Loading DLC and Time stamp
+
+	if(pHeader->TGT == CAN_TGT_ENABLE)
+	{
+		if(CANx->pCANx->MCR & (1 << 7))		//TTCM
+		{
+			temp1 |= (pHeader->TGT << 8);	//TGT
+			temp1 |= (0x8 << 0);			//DLC
+		}
+
+		else
+		{
+			temp1 &= ~(pHeader->TGT << 8);	//TGT has no meaning with TTCM cleared
+			temp1 |= (pHeader->DLC << 0);	//DLC
+		}
+	}
+
+	else
+	{
+		temp1 &= ~(pHeader->TGT << 8);	//TGT has no meaning with TTCM cleared
+		temp1 |= (pHeader->DLC << 0);	//DLC
+	}
+
+
+	//Loading Data
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
 
 
 

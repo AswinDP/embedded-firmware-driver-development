@@ -73,7 +73,6 @@ typedef struct
 } CAN_TxHeader_t;
 
 
-
 typedef struct
 {
     uint32_t StdId;
@@ -252,6 +251,16 @@ typedef enum
     CAN_STATE_SLEEP
 
 } CAN_State_t;
+
+
+typedef enum
+{
+	CAN_TxSTATE_EMPTY = 0,
+    CAN_TxSTATE_PENDING,
+    CAN_TxSTATE_SCHEDULED,
+    CAN_TxSTATE_TRANSMIT
+
+} CAN_TxState_t;
 
 
 /* ================= Core Control ================= */
