@@ -238,7 +238,8 @@ typedef enum
     CAN_ERROR,
     CAN_ERROR_TIMEOUT,
     CAN_ERROR_INVALID_PARAM,
-    CAN_ERROR_BUSY
+    CAN_ERROR_BUSY,
+	CAN_PENDING
 
 } CAN_Status_t;
 
@@ -251,16 +252,6 @@ typedef enum
     CAN_STATE_SLEEP
 
 } CAN_State_t;
-
-
-typedef enum
-{
-	CAN_TxSTATE_EMPTY = 0,
-    CAN_TxSTATE_PENDING,
-    CAN_TxSTATE_SCHEDULED,
-    CAN_TxSTATE_TRANSMIT
-
-} CAN_TxState_t;
 
 
 /* ================= Core Control ================= */
@@ -295,7 +286,7 @@ CAN_Status_t CAN_DisableFilter(CAN_Handle_t *CANx, uint8_t filterBank);
 
 CAN_Status_t CAN_AddTxMessage(CAN_Handle_t *CANx, const CAN_TxHeader_t *pHeader, const uint8_t *pData, uint8_t *pMailbox);
 
-uint8_t CAN_IsTxMessagePending(CAN_Handle_t *CANx, uint8_t mailbox);
+CAN_Status_t CAN_IsTxMessagePending(CAN_Handle_t *CANx, uint8_t mailbox);
 
 uint8_t CAN_GetTxMailboxesFreeLevel(CAN_Handle_t *CANx);
 

@@ -266,21 +266,21 @@ CAN_Status_t CAN_DisableFilter(CAN_Handle_t *CANx, uint8_t filterBank)
 
 CAN_Status_t CAN_AddTxMessage(CAN_Handle_t *CANx, const CAN_TxHeader_t *pHeader, const uint8_t *pData, uint8_t *pMailbox)
 {
-	uint32_t TSR = CANx->pCANx->TSR;
+	__vo uint32_t TSR = CANx->pCANx->TSR;
 
 	//Select one empty transmit mailbox
 
 	if(TSR & (1 << 26))
 	{
-		pMailbox = CAN_TX_MAILBOX0;
+		*pMailbox = CAN_TX_MAILBOX0;
 	}
 	else if(TSR & (1 << 27))
 	{
-		pMailbox = CAN_TX_MAILBOX1;
+		*pMailbox = CAN_TX_MAILBOX1;
 	}
 	else if(TSR & (1 << 28))
 	{
-		pMailbox = CAN_TX_MAILBOX2;
+		*pMailbox = CAN_TX_MAILBOX2;
 	}
 	else
 	{
@@ -308,46 +308,81 @@ CAN_Status_t CAN_AddTxMessage(CAN_Handle_t *CANx, const CAN_TxHeader_t *pHeader,
 
 	//Loading DLC and Time stamp
 
-	if(pHeader->TGT == CAN_TGT_ENABLE)
+	if (pHeader->DLC > 8)
 	{
-		if(CANx->pCANx->MCR & (1 << 7))		//TTCM
+		return CAN_ERROR_INVALID_PARAM;
+	}
+
+	if(CANx->pCANx->MCR & (1 << 7))			//TTCM
+	{
+
+		temp1 |= (pHeader->TGT << 8);		//TGT
+
+		if(pHeader->TGT == CAN_TGT_ENABLE)
 		{
-			temp1 |= (pHeader->TGT << 8);	//TGT
 			temp1 |= (0x8 << 0);			//DLC
 		}
 
 		else
 		{
-			temp1 &= ~(pHeader->TGT << 8);	//TGT has no meaning with TTCM cleared
 			temp1 |= (pHeader->DLC << 0);	//DLC
 		}
 	}
 
 	else
 	{
-		temp1 &= ~(pHeader->TGT << 8);	//TGT has no meaning with TTCM cleared
-		temp1 |= (pHeader->DLC << 0);	//DLC
+		temp1 &= ~(1 << 8);					//TGT has no meaning with TTCM cleared
+		temp1 |= (pHeader->DLC << 0);		//DLC
 	}
 
 
 	//Loading Data
 
+	CANx->pCANx->TX[*pMailbox].TDLR = 0;
+	CANx->pCANx->TX[*pMailbox].TDHR = 0;
+
+	for(uint8_t i = 0; i < pHeader->DLC; i++)
+	{
+		if(i < 4)
+		{
+			CANx->pCANx->TX[*pMailbox].TDLR |= (((uint32_t)pData[i] << (8*i)));			//TDLR
+
+		}
+		else
+		{
+			CANx->pCANx->TX[*pMailbox].TDHR |= (((uint32_t)pData[i] << ((i%4)*8)));		//TDHR
+		}
+	}
+
+	CANx->pCANx->TX[*pMailbox].TDTR = temp1;							//TDTR
+	CANx->pCANx->TX[*pMailbox].TIR = temp;								//TIR
+
+	// Requesting the transmission by setting the corresponding TXRQ bit
+	CANx->pCANx->TX[*pMailbox].TIR |= (1 << 0);							//TXRQ Set
 
 
-
-
-
-
-
-
-
-
-
+	return CAN_OK;
 
 }
 
 
+CAN_Status_t CAN_IsTxMessagePending(CAN_Handle_t *CANx, uint8_t mailbox)
+{
+    if(mailbox < 3)
+    {
+        // If mailbox NOT empty → pending
+        if(!(CANx->pCANx->TSR & (1 << (26 + mailbox))))
+        {
+            return CAN_PENDING;
+        }
+        else
+        {
+            return CAN_OK;   // empty
+        }
+    }
 
+    return CAN_ERROR_INVALID_PARAM;
+}
 
 
 
