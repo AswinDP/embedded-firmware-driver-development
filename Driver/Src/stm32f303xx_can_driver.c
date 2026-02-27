@@ -80,6 +80,7 @@ CAN_Status_t CAN_Init(CAN_Handle_t *CANx)
 }
 
 
+
 CAN_Status_t CAN_DeInit(CAN_Handle_t *CANx)
 {
     CAN_CLK_RST();
@@ -88,6 +89,7 @@ CAN_Status_t CAN_DeInit(CAN_Handle_t *CANx)
 
     return CAN_OK;
 }
+
 
 
 CAN_Status_t CAN_Start(CAN_Handle_t *CANx)
@@ -110,6 +112,7 @@ CAN_Status_t CAN_Start(CAN_Handle_t *CANx)
 }
 
 
+
 CAN_Status_t CAN_Stop(CAN_Handle_t *CANx)
 {
 	if(CANx->State == CAN_STATE_NORMAL)
@@ -127,6 +130,7 @@ CAN_Status_t CAN_Stop(CAN_Handle_t *CANx)
 
 	return CAN_OK;
 }
+
 
 
 CAN_Status_t CAN_RequestSleep(CAN_Handle_t *CANx)
@@ -158,6 +162,7 @@ CAN_Status_t CAN_RequestSleep(CAN_Handle_t *CANx)
 }
 
 
+
 CAN_Status_t CAN_WakeUp(CAN_Handle_t *CANx)
 {
 	if(CANx->State == CAN_STATE_SLEEP)
@@ -178,10 +183,12 @@ CAN_Status_t CAN_WakeUp(CAN_Handle_t *CANx)
 }
 
 
+
 CAN_State_t  CAN_GetState(CAN_Handle_t *CANx)
 {
 	return (CANx->State);
 }
+
 
 
 CAN_Status_t CAN_ConfigFilter(CAN_Handle_t *CANx, const CAN_FilterConfig_t *pFilter)
@@ -229,6 +236,7 @@ CAN_Status_t CAN_ConfigFilter(CAN_Handle_t *CANx, const CAN_FilterConfig_t *pFil
 }
 
 
+
 CAN_Status_t CAN_EnableFilter(CAN_Handle_t *CANx, uint8_t filterBank)
 {
 	if(filterBank < 14)
@@ -244,6 +252,7 @@ CAN_Status_t CAN_EnableFilter(CAN_Handle_t *CANx, uint8_t filterBank)
 
 	return CAN_OK;			//Leave with active mode
 }
+
 
 
 CAN_Status_t CAN_DisableFilter(CAN_Handle_t *CANx, uint8_t filterBank)
@@ -262,6 +271,7 @@ CAN_Status_t CAN_DisableFilter(CAN_Handle_t *CANx, uint8_t filterBank)
 
 	return CAN_OK;			//Leave with Initialization mode
 }
+
 
 
 CAN_Status_t CAN_AddTxMessage(CAN_Handle_t *CANx, const CAN_TxHeader_t *pHeader, const uint8_t *pData, uint8_t *pMailbox)
@@ -366,6 +376,7 @@ CAN_Status_t CAN_AddTxMessage(CAN_Handle_t *CANx, const CAN_TxHeader_t *pHeader,
 }
 
 
+
 CAN_Status_t CAN_IsTxMessagePending(CAN_Handle_t *CANx, uint8_t mailbox)
 {
     if(mailbox < 3)
@@ -384,6 +395,95 @@ CAN_Status_t CAN_IsTxMessagePending(CAN_Handle_t *CANx, uint8_t mailbox)
     return CAN_ERROR_INVALID_PARAM;
 }
 
+
+
+CAN_Status_t CAN_GetRxMessage(CAN_Handle_t *CANx, uint8_t fifo, CAN_RxHeader_t *pHeader, uint8_t *pData)
+{
+	if(fifo > 1)
+	{
+		return CAN_ERROR_INVALID_PARAM;
+	}
+
+	if(fifo == 0)
+	{
+	    if((CANx->pCANx->RF0R & 0x3) == 0)
+	        return CAN_ERROR_EMPTY;
+	}
+	else
+	{
+	    if((CANx->pCANx->RF1R & 0x3) == 0)
+	        return CAN_ERROR_EMPTY;
+	}
+
+	//Reading Id, DLC and data from rx register and loading it into user def struct
+
+	uint32_t rir = CANx->pCANx->RX[fifo].RIR;
+
+	if(rir & (1 << 2))
+	{
+		pHeader->IDE = CAN_ID_EXT;
+		pHeader->ExtId = (rir >> 3) & 0x1FFFFFFF;		//safety mask which is learnt today
+	}
+
+	else
+	{
+		pHeader->IDE = CAN_ID_STD;
+		pHeader->StdId = (rir >> 21) & 0x7FF;
+	}
+
+	pHeader->RTR = (rir >> 1) & 0x1;
+
+
+	uint32_t rdtr = CANx->pCANx->RX[fifo].RDTR;
+
+	pHeader->DLC = rdtr & 0xF;
+	pHeader->FMI = (rdtr >> 8) & 0xFF;
+	pHeader->TimeStamp = (rdtr >> 16) & 0xFFFF;
+
+
+	uint32_t rdlr = CANx->pCANx->RX[fifo].RDLR;
+	uint32_t rdhr = CANx->pCANx->RX[fifo].RDHR;
+
+	for(uint8_t i = 0; i < pHeader->DLC; i++)
+	{
+	    if(i < 4)
+	        pData[i] = (rdlr >> (8*i)) & 0xFF;
+	    else
+	        pData[i] = (rdhr >> (8*(i-4))) & 0xFF;
+	}
+
+	if(fifo == 0)
+	{
+		CANx->pCANx->RF0R |= (1 << 5);   // RFOM0
+	}
+
+	else
+	{
+		CANx->pCANx->RF1R |= (1 << 5);   // RFOM1
+	}
+
+	return CAN_OK;
+
+}
+
+
+
+uint8_t CAN_GetRxFifoFillLevel(CAN_Handle_t *CANx, uint8_t fifo)
+{
+    if (fifo > 1)
+    {
+        return CAN_ERROR_INVALID_PARAM;
+    }
+
+    if (fifo == 0)
+    {
+        return (uint8_t)(CANx->pCANx->RF0R & 0x3);   // FMP0[1:0]
+    }
+    else
+    {
+        return (uint8_t)(CANx->pCANx->RF1R & 0x3);   // FMP1[1:0]
+    }
+}
 
 
 
