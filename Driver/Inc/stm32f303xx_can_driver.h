@@ -85,6 +85,27 @@ typedef struct
 
 } CAN_RxHeader_t;
 
+typedef enum
+{
+    CAN_OK = 0,
+    CAN_ERROR,
+    CAN_ERROR_TIMEOUT,
+    CAN_ERROR_BUSY,
+	CAN_ERROR_EMPTY,
+    CAN_ERROR_INVALID_PARAM,
+	CAN_PENDING
+
+} CAN_Status_t;
+
+
+typedef enum
+{
+	CAN_STATE_RESET = 0,
+    CAN_STATE_INIT,
+    CAN_STATE_NORMAL,
+    CAN_STATE_SLEEP
+
+} CAN_State_t;
 
 
 typedef struct
@@ -232,27 +253,6 @@ typedef struct
 #define CAN_RX_FROM_FIFO0   0U
 #define CAN_RX_FROM_FIFO1   1U
 
-typedef enum
-{
-    CAN_OK = 0,
-    CAN_ERROR,
-    CAN_ERROR_TIMEOUT,
-    CAN_ERROR_BUSY,
-	CAN_ERROR_EMPTY,
-    CAN_ERROR_INVALID_PARAM,
-	CAN_PENDING
-
-} CAN_Status_t;
-
-
-typedef enum
-{
-	CAN_STATE_RESET = 0,
-    CAN_STATE_INIT,
-    CAN_STATE_NORMAL,
-    CAN_STATE_SLEEP
-
-} CAN_State_t;
 
 
 /* ================= Core Control ================= */
