@@ -49,8 +49,8 @@
 /*-----------------------------------------------------------
  * Hook functions and diagnostics
  *----------------------------------------------------------*/
-#define configCHECK_FOR_STACK_OVERFLOW    2
-#define configUSE_MALLOC_FAILED_HOOK      1
+#define configCHECK_FOR_STACK_OVERFLOW    0
+#define configUSE_MALLOC_FAILED_HOOK      0
 #define configUSE_IDLE_HOOK               0
 #define configUSE_TICK_HOOK               0
 
@@ -68,5 +68,11 @@
 #define xPortPendSVHandler   PendSV_Handler
 #define xPortSysTickHandler  SysTick_Handler
 
+//Jlink
+#define configUSE_TRACE_FACILITY               1
+#define configUSE_STATS_FORMATTING_FUNCTIONS   1
+#define INCLUDE_xTaskGetIdleTaskHandle         1
+
+#include "SEGGER_SYSVIEW_FreeRTOS.h"
 
 #endif /* FREERTOS_CONFIG_H */

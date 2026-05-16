@@ -1,33 +1,14 @@
 #include "FreeRTOS.h"
 #include "task.h"
 #include "stm32f303xx.h"
-
-
-
-
-/* Called if a task overflows its stack */
-void vApplicationStackOverflowHook(TaskHandle_t xTask, char *pcTaskName)
-{
-    (void)xTask;
-    (void)pcTaskName;
-
-    taskDISABLE_INTERRUPTS();
-    for (;;);   // stay here for debugging
-}
-
-/* Called if pvPortMalloc() fails */
-void vApplicationMallocFailedHook(void)
-{
-    taskDISABLE_INTERRUPTS();
-    for (;;);   // stay here for debugging
-}
-
+#include "SEGGER_SYSVIEW.h"
 
 /* LED 1: Fast blink */
 void LED1_Task(void *argument)
 {
     while (1)
     {
+    	SEGGER_SYSVIEW_PrintfHost("LED1 toggled");
         GPIO_TogglePin(GPIOC, GPIO_PIN8);
         vTaskDelay(pdMS_TO_TICKS(200));
     }
@@ -38,6 +19,7 @@ void LED2_Task(void *argument)
 {
     while (1)
     {
+    	SEGGER_SYSVIEW_PrintfHost("LED2 toggled");
         GPIO_TogglePin(GPIOC, GPIO_PIN9);
         vTaskDelay(pdMS_TO_TICKS(1000));
     }
@@ -93,6 +75,11 @@ int main(void)
 
     xTaskCreate(LED1_Task, "LED1", 128, NULL, 1, NULL);
     xTaskCreate(LED2_Task, "LED2", 128, NULL, 1, NULL);
+
+
+    SEGGER_SYSVIEW_Conf();
+
+    SEGGER_SYSVIEW_Start();
 
     vTaskStartScheduler();
 
