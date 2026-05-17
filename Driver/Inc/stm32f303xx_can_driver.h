@@ -8,6 +8,10 @@
 #ifndef INC_STM32F303XX_CAN_DRIVER_H_
 #define INC_STM32F303XX_CAN_DRIVER_H_
 
+
+#include "stm32f303xx.h"
+
+
 typedef struct
 {
     /* -------- Bit Timing -------- */

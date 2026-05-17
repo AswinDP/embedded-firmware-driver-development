@@ -113,6 +113,9 @@
 
 #define SYSCFG_BASEADDR				(APB2_BASEADDR + 0x0000)
 
+//DMA
+#define DMA1_BASEADDR				(APB1_BASEADDR + 0x0000)
+#define DMA2_BASEADDR				(APB1_BASEADDR + 0x0400)		//This isnt used yet
 
 
 
@@ -360,6 +363,24 @@ typedef struct
 
 } CAN_Regs_t;
 
+//DMA Register structure
+typedef struct
+{
+	__vo uint32_t CCR;
+	__vo uint32_t CNDTR;
+	__vo uint32_t CPAR;
+	__vo uint32_t CMAR;
+	__vo uint32_t RESERVED;
+}DMA_Channel_Config_t;
+
+
+typedef struct
+{
+	__vo uint32_t ISR;
+	__vo uint32_t IFCR;
+	__vo DMA_Channel_Config_t CHANNEL[7];
+
+}DMA_Regs_t;
 
 
 //NVIC Peripheral definitions
@@ -625,11 +646,139 @@ typedef struct
 #define GP1_TIM_CCER_CC4NP   15
 
 
+/* ============================================================
+ * DMA_CCRx Register Bit Positions
+ * ============================================================
+ */
+#define DMA_CCR_EN            0   /* Channel enable */
+#define DMA_CCR_TCIE          1   /* Transfer complete interrupt enable */
+#define DMA_CCR_HTIE          2   /* Half transfer interrupt enable */
+#define DMA_CCR_TEIE          3   /* Transfer error interrupt enable */
+#define DMA_CCR_DIR           4   /* Data transfer direction
+                                         0: Peripheral-to-memory
+                                         1: Memory-to-peripheral */
+#define DMA_CCR_CIRC          5   /* Circular mode */
+#define DMA_CCR_PINC          6   /* Peripheral increment mode */
+#define DMA_CCR_MINC          7   /* Memory increment mode */
+#define DMA_CCR_PSIZE         8   /* Peripheral size (bits 9:8) */
+#define DMA_CCR_MSIZE        10   /* Memory size (bits 11:10) */
+#define DMA_CCR_PL           12   /* Channel priority level (bits 13:12) */
+#define DMA_CCR_MEM2MEM      14   /* Memory-to-memory mode enable */
+
+/* ============================================================
+ * DMA_CNDTRx Register Bit Positions
+ * ============================================================
+ */
+#define DMA_CNDTR_NDT         0   /* Number of data to transfer (bits 15:0) */
+
+
+/* ============================================================
+ * DMA_ISR Register Flag Positions
+ * (Each channel occupies 4 bits)
+ * ============================================================
+ */
+
+/* Channel 1 */
+#define DMA_ISR_GIF1          0   /* Global interrupt flag */
+#define DMA_ISR_TCIF1         1   /* Transfer complete flag */
+#define DMA_ISR_HTIF1         2   /* Half transfer flag */
+#define DMA_ISR_TEIF1         3   /* Transfer error flag */
+
+/* Channel 2 */
+#define DMA_ISR_GIF2          4
+#define DMA_ISR_TCIF2         5
+#define DMA_ISR_HTIF2         6
+#define DMA_ISR_TEIF2         7
+
+/* Channel 3 */
+#define DMA_ISR_GIF3          8
+#define DMA_ISR_TCIF3         9
+#define DMA_ISR_HTIF3        10
+#define DMA_ISR_TEIF3        11
+
+/* Channel 4 */
+#define DMA_ISR_GIF4         12
+#define DMA_ISR_TCIF4        13
+#define DMA_ISR_HTIF4        14
+#define DMA_ISR_TEIF4        15
+
+/* Channel 5 */
+#define DMA_ISR_GIF5         16
+#define DMA_ISR_TCIF5        17
+#define DMA_ISR_HTIF5        18
+#define DMA_ISR_TEIF5        19
+
+/* Channel 6 */
+#define DMA_ISR_GIF6         20
+#define DMA_ISR_TCIF6        21
+#define DMA_ISR_HTIF6        22
+#define DMA_ISR_TEIF6        23
+
+/* Channel 7 */
+#define DMA_ISR_GIF7         24
+#define DMA_ISR_TCIF7        25
+#define DMA_ISR_HTIF7        26
+#define DMA_ISR_TEIF7        27
+
+
+/* ============================================================
+ * DMA_IFCR Register Bit Positions
+ * (Write 1 to clear corresponding ISR flag)
+ * ============================================================
+ */
+
+/* Channel 1 */
+#define DMA_IFCR_CGIF1        0
+#define DMA_IFCR_CTCIF1       1
+#define DMA_IFCR_CHTIF1       2
+#define DMA_IFCR_CTEIF1       3
+
+/* Channel 2 */
+#define DMA_IFCR_CGIF2        4
+#define DMA_IFCR_CTCIF2       5
+#define DMA_IFCR_CHTIF2       6
+#define DMA_IFCR_CTEIF2       7
+
+/* Channel 3 */
+#define DMA_IFCR_CGIF3        8
+#define DMA_IFCR_CTCIF3       9
+#define DMA_IFCR_CHTIF3      10
+#define DMA_IFCR_CTEIF3      11
+
+/* Channel 4 */
+#define DMA_IFCR_CGIF4       12
+#define DMA_IFCR_CTCIF4      13
+#define DMA_IFCR_CHTIF4      14
+#define DMA_IFCR_CTEIF4      15
+
+/* Channel 5 */
+#define DMA_IFCR_CGIF5       16
+#define DMA_IFCR_CTCIF5      17
+#define DMA_IFCR_CHTIF5      18
+#define DMA_IFCR_CTEIF5      19
+
+/* Channel 6 */
+#define DMA_IFCR_CGIF6       20
+#define DMA_IFCR_CTCIF6      21
+#define DMA_IFCR_CHTIF6      22
+#define DMA_IFCR_CTEIF6      23
+
+/* Channel 7 */
+#define DMA_IFCR_CGIF7       24
+#define DMA_IFCR_CTCIF7      25
+#define DMA_IFCR_CHTIF7      26
+#define DMA_IFCR_CTEIF7      27
+
+
+
 //NVIC Peripheral definitions
 #define EXTI						((EXTI_Regs_t*)EXTI_BASEADDR)
 
 //SYSCFG Peripheral definitions
 #define SYSCFG						((SYSCFG_Regs_t*)SYSCFG_BASEADDR)
+
+//DMA definitions
+#define DMA1						((DMA_Regs_t*)DMA1_BASEADDR)
 
 
 //Clock Enable Macros for GPIOx
@@ -684,9 +833,11 @@ typedef struct
 //Clock Enable Macros for SYSCFG & EXTI
 #define SYSCFG_CLK_EN()				( RCC -> APB2ENR |= (1 << 0))
 
-
 //Clock Enable Macros for CAN
 #define CAN_CLK_EN()				( RCC -> APB1ENR |= (1 << 25))
+
+//Clock Enable Macros for DMA
+#define DMA1_CLK_EN()				( RCC -> AHBENR |= (1 << 0))
 
 //Clock Disable Macros for GPIOx
 #define GPIOA_CLK_DI()				( RCC -> AHBENR &= ~(1 << 17))
@@ -742,6 +893,12 @@ typedef struct
 
 //Clock Disable Macros for CAN
 #define CAN_CLK_DI()				( RCC -> APB1ENR &= ~(1 << 25))
+
+
+//Clock Disable Macros for DMA
+#define DMA1_CLK_DI()				( RCC -> AHBENR &= ~(1 << 0))
+
+
 
 //Gpio Reset Macro
 #define GPIOA_REG_RST()				do {( RCC -> AHBRSTR |= (1 << 17));  ( RCC -> AHBRSTR &= ~(1 << 17));} while(0)
@@ -806,5 +963,6 @@ typedef struct
 #include "stm32f303xx_rcc_driver.h"
 #include "stm32f303xx_exti_driver.h"
 #include "stm32f303xx_can_driver.h"
+#include "stm32f303xx_dma_driver.h"
 
 #endif /* INC_STM32F303XX_H_ */
