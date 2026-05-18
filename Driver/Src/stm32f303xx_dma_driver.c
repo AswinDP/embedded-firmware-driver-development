@@ -108,9 +108,85 @@ void DMA_DeInit(DMA_Handle_t *pDMAHandle)
  * DMA Transfer Control
  * ============================================================
  */
-void DMA_Start(DMA_Handle_t *pDMAHandle, uint32_t srcAddr, uint32_t dstAddr, uint16_t len);
+void DMA_Start(DMA_Handle_t *pDMAHandle, uint32_t srcAddr, uint32_t dstAddr, uint16_t len)
+{
+	//Disables Channel
+	pDMAHandle->pDMAx->CHANNEL[pDMAHandle->channelNumber].CCR &= ~(1U << DMA_CCR_EN);
 
-void DMA_Stop(DMA_Handle_t *pDMAHandle);
+	//Clears Global Flag
+	pDMAHandle->pDMAx->IFCR = (0x0FU << (pDMAHandle->channelNumber * 4));
+
+	//Load CPAR
+	pDMAHandle->pDMAx->CHANNEL[pDMAHandle->channelNumber].CPAR = srcAddr;
+
+	//Load CMAR
+	pDMAHandle->pDMAx->CHANNEL[pDMAHandle->channelNumber].CMAR = dstAddr;
+
+	//Set Data Length
+	pDMAHandle->pDMAx->CHANNEL[pDMAHandle->channelNumber].CNDTR = len;
+
+	//Enable Channel
+	pDMAHandle->pDMAx->CHANNEL[pDMAHandle->channelNumber].CCR |= (1U << DMA_CCR_EN);
+}
+
+
+void DMA_Stop(DMA_Handle_t *pDMAHandle)
+{
+	//Disables Channel
+	pDMAHandle->pDMAx->CHANNEL[pDMAHandle->channelNumber].CCR &= ~(1U << DMA_CCR_EN);
+
+	//Deinit clears everything completely whereas stop just disables the channel only
+	//Supports Dynamic reconfiguration with existing channel configuration
+
+	//Clears Global Flag
+	pDMAHandle->pDMAx->IFCR = (0x0FU << (pDMAHandle->channelNumber * 4));
+}
+
+
+/* ============================================================
+ * DMA Dynamic Reconfiguration
+ * ============================================================
+ */
+void DMA_SetPeripheralAddress(DMA_Handle_t *pDMAHandle, uint32_t periphAddr)
+{
+	//Load CPAR
+	pDMAHandle->pDMAx->CHANNEL[pDMAHandle->channelNumber].CPAR = periphAddr;
+}
+
+void DMA_SetMemoryAddress(DMA_Handle_t *pDMAHandle, uint32_t memAddr)
+{
+	//Load CMAR
+	pDMAHandle->pDMAx->CHANNEL[pDMAHandle->channelNumber].CMAR = memAddr;
+}
+
+void DMA_SetTransferLength(DMA_Handle_t *pDMAHandle, uint16_t len)
+{
+	//Set Data Length
+	pDMAHandle->pDMAx->CHANNEL[pDMAHandle->channelNumber].CNDTR = len;
+}
+
+
+/* ============================================================
+ * DMA Status / Monitoring
+ * ============================================================
+ */
+uint16_t DMA_GetRemainingData(DMA_Handle_t *pDMAHandle)
+{
+	return ((uint16_t)pDMAHandle->pDMAx->CHANNEL[pDMAHandle->channelNumber].CNDTR);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
