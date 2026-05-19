@@ -13,7 +13,7 @@
  */
 void DMA_PeriClockControl(DMA_Regs_t *pDMAx, uint8_t EnOrDi)
 {
-	if(EnorDi == ENABLE)
+	if(EnOrDi == ENABLE)
 	{
 		if(pDMAx == DMA1)
 		{
