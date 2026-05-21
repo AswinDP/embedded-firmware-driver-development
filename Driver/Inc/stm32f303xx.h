@@ -114,8 +114,8 @@
 #define SYSCFG_BASEADDR				(APB2_BASEADDR + 0x0000)
 
 //DMA
-#define DMA1_BASEADDR				(APB1_BASEADDR + 0x0000)
-#define DMA2_BASEADDR				(APB1_BASEADDR + 0x0400)		//This isnt used yet
+#define DMA1_BASEADDR				(AHB1_BASEADDR + 0x0000)
+#define DMA2_BASEADDR				(AHB1_BASEADDR + 0x0400)		//This isnt used yet
 
 
 
