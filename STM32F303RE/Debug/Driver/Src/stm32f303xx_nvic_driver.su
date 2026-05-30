@@ -1,0 +1,7 @@
+../Driver/Src/stm32f303xx_nvic_driver.c:12:6:NVIC_EnableIRQ	16	static
+../Driver/Src/stm32f303xx_nvic_driver.c:22:6:NVIC_DisableIRQ	16	static
+../Driver/Src/stm32f303xx_nvic_driver.c:32:6:NVIC_SetPendingIRQ	16	static
+../Driver/Src/stm32f303xx_nvic_driver.c:42:6:NVIC_ClearPendingIRQ	16	static
+../Driver/Src/stm32f303xx_nvic_driver.c:54:10:NVIC_GetPendingIRQ	16	static
+../Driver/Src/stm32f303xx_nvic_driver.c:64:6:NVIC_SetPriority	24	static
+../Driver/Src/stm32f303xx_nvic_driver.c:83:9:NVIC_GetPriority	24	static

@@ -1,0 +1,89 @@
+/*********************************************************************
+*                             Aswin D P                              *
+*                           The Dual Rook                            *
+**********************************************************************
+
+-------------------------- END-OF-HEADER -----------------------------
+
+File    : nrf52840.h
+Purpose : MCU header file
+
+*/
+
+
+
+
+
+
+
+/******************************************************************************
+ * Sample
+ ******************************************************************************/
+
+
+
+
+
+
+
+
+
+
+/**
+ * @brief Maximum supported GPIO pins
+ *
+ * Valid pin numbers are 0-31.
+ */
+
+
+/**
+ * @brief GPIO pin set state
+ */
+
+
+
+
+
+
+
+/* --------------------------------- GPIO Configuration Functions -------------------------------- */
+
+
+
+
+
+
+
+
+/**
+ * @brief Configure GPIO pin
+ *
+ * @param pin GPIO pin number
+ * @param dir GPIO direction
+ *
+ * @return 0 Success
+ * @return -1 Invalid parameter
+ */
+
+
+
+
+
+
+
+/* FIXME:
+ * Handle invalid pin numbers
+ */
+
+ /* TODO:
+ * Add interrupt support
+ */
+
+
+
+
+
+
+
+
+/******************************* END OF FILE *********************************/

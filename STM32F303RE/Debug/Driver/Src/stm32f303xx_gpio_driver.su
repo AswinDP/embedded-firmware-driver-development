@@ -1,0 +1,10 @@
+../Driver/Src/stm32f303xx_gpio_driver.c:16:6:GPIO_Init	24	static
+../Driver/Src/stm32f303xx_gpio_driver.c:94:6:GPIO_DeInit	16	static
+../Driver/Src/stm32f303xx_gpio_driver.c:133:6:GPIO_ClkControl	16	static
+../Driver/Src/stm32f303xx_gpio_driver.c:209:9:GPIO_ReadPin	24	static
+../Driver/Src/stm32f303xx_gpio_driver.c:219:10:GPIO_ReadPort	16	static
+../Driver/Src/stm32f303xx_gpio_driver.c:227:6:GPIO_WritePin	16	static
+../Driver/Src/stm32f303xx_gpio_driver.c:242:6:GPIO_WritePort	16	static
+../Driver/Src/stm32f303xx_gpio_driver.c:250:6:GPIO_TogglePin	16	static
+../Driver/Src/stm32f303xx_gpio_driver.c:258:6:GPIO_IRQConfig	16	static
+../Driver/Src/stm32f303xx_gpio_driver.c:264:6:GPIO_IRQHandling	16	static

@@ -1,0 +1,7 @@
+../Driver/Src/stm32f303xx_i2c_driver.c:12:6:I2C_ClkControl	16	static
+../Driver/Src/stm32f303xx_i2c_driver.c:48:6:I2C_Init	32	static
+../Driver/Src/stm32f303xx_i2c_driver.c:124:6:I2C_DeInit	16	static
+../Driver/Src/stm32f303xx_i2c_driver.c:142:6:I2C_SlaveSendData	16	static
+../Driver/Src/stm32f303xx_i2c_driver.c:169:9:I2C_SlaveReceiveData	24	static
+../Driver/Src/stm32f303xx_i2c_driver.c:196:6:I2C_MasterSendData	24	static
+../Driver/Src/stm32f303xx_i2c_driver.c:251:6:I2C_MasterReceiveData	24	static

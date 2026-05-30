@@ -1,0 +1,9 @@
+../Driver/Src/stm32f303xx_dma_driver.c:14:6:DMA_PeriClockControl	16	static
+../Driver/Src/stm32f303xx_dma_driver.c:38:6:DMA_Init	16	static
+../Driver/Src/stm32f303xx_dma_driver.c:88:6:DMA_DeInit	16	static
+../Driver/Src/stm32f303xx_dma_driver.c:111:6:DMA_Start	24	static
+../Driver/Src/stm32f303xx_dma_driver.c:133:6:DMA_Stop	16	static
+../Driver/Src/stm32f303xx_dma_driver.c:150:6:DMA_SetPeripheralAddress	16	static
+../Driver/Src/stm32f303xx_dma_driver.c:156:6:DMA_SetMemoryAddress	16	static
+../Driver/Src/stm32f303xx_dma_driver.c:162:6:DMA_SetTransferLength	16	static
+../Driver/Src/stm32f303xx_dma_driver.c:173:10:DMA_GetRemainingData	16	static

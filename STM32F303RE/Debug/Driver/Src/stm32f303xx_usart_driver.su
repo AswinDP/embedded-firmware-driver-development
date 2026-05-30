@@ -1,0 +1,5 @@
+../Driver/Src/stm32f303xx_usart_driver.c:11:6:USART_ClkControl	16	static
+../Driver/Src/stm32f303xx_usart_driver.c:64:6:USART_Init	24	static
+../Driver/Src/stm32f303xx_usart_driver.c:206:6:USART_DeInit	16	static
+../Driver/Src/stm32f303xx_usart_driver.c:231:6:USART_SendData	32	static
+../Driver/Src/stm32f303xx_usart_driver.c:297:6:USART_ReceiveData	32	static
