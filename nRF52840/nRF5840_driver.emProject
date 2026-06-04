@@ -29,7 +29,12 @@
       <file file_name="Setup/SEGGER_Flash.icf" />
     </folder>
     <folder Name="Source">
-      <file file_name="Source/main.c" />
+      <file file_name="Source/main.c">
+        <configuration Name="Debug" build_exclude_from_build="Yes" />
+      </file>
+      <file file_name="Source/001_gpio_test.c">
+        <configuration Name="Debug" build_exclude_from_build="No" />
+      </file>
     </folder>
     <folder Name="System">
       <file file_name="System/Cortex_M_Startup.s" />
@@ -40,12 +45,17 @@
         <file file_name="Driver/inc/nrf52840.h" />
         <file file_name="Driver/inc/nrf52840_gpio.h" />
       </folder>
-      <folder Name="src" />
+      <folder Name="src">
+        <file file_name="Driver/src/nrf52840_gpio.c" />
+      </folder>
     </folder>
     <folder Name="Docs">
       <configuration Name="Debug" build_exclude_from_build="Yes" />
       <file file_name="Doc/comments.txt" />
     </folder>
+    <configuration
+      Name="Debug"
+      c_user_include_directories="C:\\Users\\aswin\\OneDrive\\Documents\\embedded-firmware-driver-development\\nRF52840\\Driver\\inc;C:\\Users\\aswin\\OneDrive\\Documents\\embedded-firmware-driver-development\\nRF52840\\Driver\\src" />
   </project>
   <configuration
     Name="Debug"

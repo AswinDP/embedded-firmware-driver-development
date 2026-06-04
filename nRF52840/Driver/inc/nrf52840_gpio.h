@@ -104,22 +104,22 @@ Purpose : GPIO header file
 #define GPIO_PIN_DRIVE_H0D1              7
 
 /* Standard GPIO */
-#define GPIO_DRIVE_STANDARD         GPIO_DRIVE_S0S1
+#define GPIO_DRIVE_STANDARD         GPIO_PIN_DRIVE_S0S1
 
 /* High Drive GPIO */
-#define GPIO_DRIVE_HIGH             GPIO_DRIVE_H0H1
+#define GPIO_DRIVE_HIGH             GPIO_PIN_DRIVE_H0H1
 
 /* Open Drain */
-#define GPIO_DRIVE_OPEN_DRAIN_STD   GPIO_DRIVE_S0D1
-#define GPIO_DRIVE_OPEN_DRAIN_HIGH  GPIO_DRIVE_H0D1
+#define GPIO_DRIVE_OPEN_DRAIN_STD   GPIO_PIN_DRIVE_S0D1
+#define GPIO_DRIVE_OPEN_DRAIN_HIGH  GPIO_PIN_DRIVE_H0D1
 
 /* Open Source */
-#define GPIO_DRIVE_OPEN_SRC_STD     GPIO_DRIVE_D0S1
-#define GPIO_DRIVE_OPEN_SRC_HIGH    GPIO_DRIVE_D0H1
+#define GPIO_DRIVE_OPEN_SRC_STD     GPIO_PIN_DRIVE_D0S1
+#define GPIO_DRIVE_OPEN_SRC_HIGH    GPIO_PIN_DRIVE_D0H1
 
 /* Asymmetric Drive */
-#define GPIO_DRIVE_PULLUP_STRONG    GPIO_DRIVE_S0H1
-#define GPIO_DRIVE_PULLDOWN_STRONG  GPIO_DRIVE_H0S1
+#define GPIO_DRIVE_PULLUP_STRONG    GPIO_PIN_DRIVE_S0H1
+#define GPIO_DRIVE_PULLDOWN_STRONG  GPIO_PIN_DRIVE_H0S1
                                          
 /* ---------------------------- GPIO Pin PUPD ---------------------------- */
 
@@ -137,6 +137,19 @@ Purpose : GPIO header file
 #define GPIO_PIN_SENSE_DISABLE           0
 #define GPIO_PIN_SENSE_HIGH              2
 #define GPIO_PIN_SENSE_LOW               3
+
+/* ---------------------------- Internal Helpers ---------------------------- */
+
+#define GPIO_GET_PORT(pin)    (((pin) < 32U) ? GPIOP0 : GPIOP1)
+#define GPIO_GET_PIN(pin)     ((pin) & 0x1FU)
+
+/* ---------------------------- Bit Position Macros ---------------------------- */
+
+#define GPIO_PIN_CNF_DIR_POS      0U
+#define GPIO_PIN_CNF_INPUT_POS    1U
+#define GPIO_PIN_CNF_PULL_POS     2U
+#define GPIO_PIN_CNF_DRIVE_POS    8U
+#define GPIO_PIN_CNF_SENSE_POS    16U
 
 
 
@@ -158,15 +171,6 @@ typedef struct{
 }GPIO_PinConfig_t;
 
 
-/* ---------------------------- Handle Structure ---------------------------- */
-
-typedef struct{
-
-	GPIO_Reg_def_t *pGPIOx;
-	GPIO_PinConfig_t GPIO_PinConfig;
-
-}GPIO_Handle_t;
-
 
 /******************************************************************************
  * Basic Configuration Macros
@@ -177,63 +181,63 @@ typedef struct{
 {                                  \
     .GPIO_PinType      = GPIO_PIN_OUTPUT, \
     .GPIO_PinDrive     = GPIO_DRIVE_STANDARD, \
-    .GPIO_PinPuPd      = GPIO_NO_PUPD, \
-    .GPIO_PinInputConn = GPIO_INPUT_DISCONNECT, \
-    .GPIO_PinSense     = GPIO_SENSE_DISABLE \
+    .GPIO_PinPuPd      = GPIO_PIN_NO_PUPD, \
+    .GPIO_PinInBuff = GPIO_PIN_INPUT_DISCONNECT, \
+    .GPIO_PinSense     = GPIO_PIN_SENSE_DISABLE \
 }
 
 #define GPIO_CFG_INPUT             \
 {                                  \
     .GPIO_PinType      = GPIO_PIN_INPUT, \
     .GPIO_PinDrive     = GPIO_DRIVE_STANDARD, \
-    .GPIO_PinPuPd      = GPIO_NO_PUPD, \
-    .GPIO_PinInputConn = GPIO_INPUT_CONNECT, \
-    .GPIO_PinSense     = GPIO_SENSE_DISABLE \
+    .GPIO_PinPuPd      = GPIO_PIN_NO_PUPD, \
+    .GPIO_PinInBuff = GPIO_PIN_INPUT_CONNECT, \
+    .GPIO_PinSense     = GPIO_PIN_SENSE_DISABLE \
 }
 
 #define GPIO_CFG_INPUT_PULLUP      \
 {                                  \
     .GPIO_PinType      = GPIO_PIN_INPUT, \
     .GPIO_PinDrive     = GPIO_DRIVE_STANDARD, \
-    .GPIO_PinPuPd      = GPIO_PULLUP, \
-    .GPIO_PinInputConn = GPIO_INPUT_CONNECT, \
-    .GPIO_PinSense     = GPIO_SENSE_DISABLE \
+    .GPIO_PinPuPd      = GPIO_PIN_PULLUP, \
+    .GPIO_PinInBuff = GPIO_PIN_INPUT_CONNECT, \
+    .GPIO_PinSense     = GPIO_PIN_SENSE_DISABLE \
 }
 
 #define GPIO_CFG_INPUT_PULLDOWN    \
 {                                  \
     .GPIO_PinType      = GPIO_PIN_INPUT, \
     .GPIO_PinDrive     = GPIO_DRIVE_STANDARD, \
-    .GPIO_PinPuPd      = GPIO_PULLDOWN, \
-    .GPIO_PinInputConn = GPIO_INPUT_CONNECT, \
-    .GPIO_PinSense     = GPIO_SENSE_DISABLE \
+    .GPIO_PinPuPd      = GPIO_PIN_PULLDOWN, \
+    .GPIO_PinInBuff = GPIO_PIN_INPUT_CONNECT, \
+    .GPIO_PinSense     = GPIO_PIN_SENSE_DISABLE \
 }
 
 #define GPIO_CFG_OPEN_DRAIN        \
 {                                  \
     .GPIO_PinType      = GPIO_PIN_OUTPUT, \
     .GPIO_PinDrive     = GPIO_DRIVE_OPEN_DRAIN_STD, \
-    .GPIO_PinPuPd      = GPIO_NO_PUPD, \
-    .GPIO_PinInputConn = GPIO_DISCONNECT, \
-    .GPIO_PinSense     = GPIO_SENSE_DISABLE \
+    .GPIO_PinPuPd      = GPIO_PIN_NO_PUPD, \
+    .GPIO_PinInBuff = GPIO_PIN_DISCONNECT, \
+    .GPIO_PinSense     = GPIO_PIN_SENSE_DISABLE \
 }
 
 #define GPIO_CFG_WAKEUP_LOW        \
 {                                  \
     .GPIO_PinType      = GPIO_PIN_INPUT, \
     .GPIO_PinDrive     = GPIO_DRIVE_STANDARD, \
-    .GPIO_PinPuPd      = GPIO_PULLUP, \
-    .GPIO_PinInputConn = GPIO_INPUT_CONNECT, \
-    .GPIO_PinSense     = GPIO_SENSE_LOW \
+    .GPIO_PinPuPd      = GPIO_PIN_PULLUP, \
+    .GPIO_PinInBuff = GPIO_PIN_INPUT_CONNECT, \
+    .GPIO_PinSense     = GPIO_PIN_SENSE_LOW \
 }
 
 #define GPIO_CFG_WAKEUP_HIGH       \
 {                                  \
     .GPIO_PinType      = GPIO_PIN_INPUT, \
     .GPIO_PinDrive     = GPIO_DRIVE_STANDARD, \
-    .GPIO_PinPuPd      = GPIO_PULLDOWN, \
-    .GPIO_PinInputConn = GPIO_INPUT_CONNECT, \
-    .GPIO_PinSense     = GPIO_SENSE_HIGH \
+    .GPIO_PinPuPd      = GPIO_PIN_PULLDOWN, \
+    .GPIO_PinInBuff = GPIO_PIN_INPUT_CONNECT, \
+    .GPIO_PinSense     = GPIO_PIN_SENSE_HIGH \
 }
 
 #define GPIO_CFG(mode,pull,drive,input,sense) \
@@ -241,7 +245,7 @@ typedef struct{
     .GPIO_PinType      = (mode),              \
     .GPIO_PinPuPd      = (pull),              \
     .GPIO_PinDrive     = (drive),             \
-    .GPIO_PinInputConn = (input),             \
+    .GPIO_PinInBuff = (input),             \
     .GPIO_PinSense     = (sense)              \
 }
 
@@ -251,32 +255,23 @@ typedef struct{
  * Function Declaration
  ******************************************************************************/
 
+void GPIO_Init(GPIO_PinConfig_t *pGPIOConfig);
+void GPIO_DeInit(uint8_t PinNo);
 
-void GPIO_Init(GPIO_Handle_t *pGPIOHandle);
-void GPIO_DeInit(GPIO_Reg_def_t *pGPIOx);
+void GPIO_SetPin(uint8_t PinNo);
+void GPIO_ClearPin(uint8_t PinNo);
 
-void GPIO_SetPin(GPIO_Reg_def_t *pGPIOx, uint8_t PinNo);
-void GPIO_ClearPin(GPIO_Reg_def_t *pGPIOx, uint8_t PinNo);
-
-void GPIO_WritePin(GPIO_Reg_def_t *pGPIOx,
-                   uint8_t PinNo,
+void GPIO_WritePin(uint8_t PinNo,
                    uint8_t Value);
 
-uint8_t GPIO_ReadPin(GPIO_Reg_def_t *pGPIOx,
-                     uint8_t PinNo);
+uint8_t GPIO_ReadPin(uint8_t PinNo);
 
-void GPIO_TogglePin(GPIO_Reg_def_t *pGPIOx,
-                    uint8_t PinNo);
-
-uint32_t GPIO_ReadPort(GPIO_Reg_def_t *pGPIOx);
-void GPIO_WritePort(GPIO_Reg_def_t *pGPIOx,
-                    uint32_t Value);
+void GPIO_TogglePin(uint8_t PinNo);
 
 
 
 
-
-
+/******************************* END OF FILE *********************************/
 
 
 
