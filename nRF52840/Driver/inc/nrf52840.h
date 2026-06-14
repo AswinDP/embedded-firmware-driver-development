@@ -146,19 +146,22 @@ Purpose : MCU header file
 
 /* ------------------------- GPIO Register Definition ----------------------- */
 
-typedef struct{
-
-	__vo uint32_t OUT;
-	__vo uint32_t OUTSET;
-	__vo uint32_t OUTCLR;
-	__vo uint32_t IN;
-	__vo uint32_t DIR;
-	__vo uint32_t DIRSET;
-	__vo uint32_t DIRCLR;
-	__vo uint32_t LATCH;
-	__vo uint32_t DETECTMODE;
-    uint32_t RESERVED[44];
-	__vo uint32_t PIN_CNF[32];
+typedef struct {
+    uint32_t RESERVED_0[321];      // Padding from base 0x000 to 0x504 (1284 bytes)
+    
+    __vo uint32_t OUT;             // Offset 0x504
+    __vo uint32_t OUTSET;          // Offset 0x508
+    __vo uint32_t OUTCLR;          // Offset 0x50C
+    __vo uint32_t IN;              // Offset 0x510
+    __vo uint32_t DIR;             // Offset 0x514
+    __vo uint32_t DIRSET;          // Offset 0x518
+    __vo uint32_t DIRCLR;          // Offset 0x51C
+    __vo uint32_t LATCH;           // Offset 0x520
+    __vo uint32_t DETECTMODE;      // Offset 0x524
+    
+    uint32_t RESERVED_1[118];      // Padding from 0x528 to 0x700 (472 bytes)
+    
+    __vo uint32_t PIN_CNF[32];     // Offset 0x700 to 0x77C
 
 } GPIO_Reg_def_t;
 
@@ -167,3 +170,6 @@ typedef struct{
 
 #define GPIOP0                        ((GPIO_Reg_def_t*)NRF_P0_BASE)
 #define GPIOP1                        ((GPIO_Reg_def_t*)NRF_P1_BASE)
+
+
+/******************************* END OF FILE *********************************/

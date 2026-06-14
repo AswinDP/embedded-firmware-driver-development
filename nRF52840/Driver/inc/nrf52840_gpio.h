@@ -218,7 +218,7 @@ typedef struct{
     .GPIO_PinType      = GPIO_PIN_OUTPUT, \
     .GPIO_PinDrive     = GPIO_DRIVE_OPEN_DRAIN_STD, \
     .GPIO_PinPuPd      = GPIO_PIN_NO_PUPD, \
-    .GPIO_PinInBuff = GPIO_PIN_DISCONNECT, \
+    .GPIO_PinInBuff = GPIO_PIN_INPUT_DISCONNECT, \
     .GPIO_PinSense     = GPIO_PIN_SENSE_DISABLE \
 }
 

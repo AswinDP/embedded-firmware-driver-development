@@ -55,7 +55,17 @@
     </folder>
     <configuration
       Name="Debug"
-      c_user_include_directories="C:\\Users\\aswin\\OneDrive\\Documents\\embedded-firmware-driver-development\\nRF52840\\Driver\\inc;C:\\Users\\aswin\\OneDrive\\Documents\\embedded-firmware-driver-development\\nRF52840\\Driver\\src" />
+      arm_architecture="v7EM"
+      arm_core_type="Cortex-M4"
+      arm_endian="Little"
+      arm_fpu_type="FPv4-SP-D16"
+      arm_simulator_memory_simulation_parameter="RX 00000000,00100000,FFFFFFFF;RWX 20000000,00040000,CDCDCDCD"
+      arm_target_device_name="nRF52840_xxAA"
+      c_user_include_directories="C:\\Users\\aswin\\OneDrive\\Documents\\embedded-firmware-driver-development\\nRF52840\\Driver\\inc;C:\\Users\\aswin\\OneDrive\\Documents\\embedded-firmware-driver-development\\nRF52840\\Driver\\src;C:\\Users\\aswin\\OneDrive\\Documents\\embedded-firmware-driver-development\\nRF52840\\Board"
+      linker_section_placements_segments="FLASH1 RX 0x00000000 0x00100000;RAM1 RWX 0x20000000 0x00040000" />
+    <folder Name="Board">
+      <file file_name="Board/tw_nrf52840_board.h" />
+    </folder>
   </project>
   <configuration
     Name="Debug"

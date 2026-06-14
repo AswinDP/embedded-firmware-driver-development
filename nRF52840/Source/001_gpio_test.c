@@ -12,7 +12,7 @@ Purpose : GPIO test main file
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "nrf52840_gpio.h"
+#include "tw_nrf52840_board.h"
 
 /*********************************************************************
 *
@@ -32,16 +32,19 @@ static void delay(void)
 int main(void)
 {
     GPIO_PinConfig_t LedCfg = GPIO_CFG_OUTPUT;
-    LedCfg.GPIO_PinNo = P0_24;
+    LedCfg.GPIO_PinNo = LED_RED;
 
     GPIO_Init(&LedCfg);
 
     while(1)
     {
-        GPIO_ClearPin(P0_24);
+        GPIO_ClearPin(LED_RED);
         delay();
 
-        GPIO_SetPin(P0_24);
+        GPIO_SetPin(LED_RED);
         delay();
     }
 }
+
+
+/******************************* END OF FILE *********************************/
