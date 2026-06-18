@@ -61,12 +61,11 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="3" y="138" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="Driver/inc/nrf52840.h" selected="0" top="134" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="8" y="132" useTextEdit="1" openedFrom="C:/Users/aswin/OneDrive/Documents/embedded-firmware-driver-development/nRF52840/Board/tw_nrf52840_board.h" useBinaryEdit="0" left="0" path="Driver/inc/nrf52840_gpio.h" selected="0" top="138" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="47" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="Driver/src/nrf52840_gpio.c" selected="0" top="3" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="27" y="43" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="Source/001_gpio_test.c" selected="1" top="8" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="88" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="Doc/comments.txt" selected="0" top="60" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="72" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="Board/tw_nrf52840_board.h" selected="0" top="10" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="37" y="230" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="Driver/inc/nrf52840.h" selected="1" top="161" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="9" y="19" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="Doc/comments.txt" selected="0" top="0" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="72" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="Board/tw_nrf52840_board.h" selected="0" top="0" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="33" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="Driver/inc/nrf52840_spim.h" selected="0" top="0" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="153" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="Driver/inc/nrf52840_gpio.h" selected="0" top="138" codecName="Default"/>
  </Files>
- <ARMCrossStudioWindow activeProject="nRF52840_driver" fileDialogDefaultFilter="*" autoConnectTarget="J-Link" buildConfiguration="Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="C:/Users/aswin/OneDrive/Documents/embedded-firmware-driver-development/nRF52840/Source" debugSearchPath="" autoConnectCapabilities="3711"/>
+ <ARMCrossStudioWindow activeProject="nRF52840_driver" fileDialogDefaultFilter="*" autoConnectTarget="J-Link" buildConfiguration="Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="C:/Users/aswin/OneDrive/Documents/embedded-firmware-driver-development/nRF52840/Driver/src" debugSearchPath="" autoConnectCapabilities="3199"/>
 </session>

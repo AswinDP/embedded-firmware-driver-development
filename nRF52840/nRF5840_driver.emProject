@@ -33,7 +33,7 @@
         <configuration Name="Debug" build_exclude_from_build="Yes" />
       </file>
       <file file_name="Source/001_gpio_test.c">
-        <configuration Name="Debug" build_exclude_from_build="No" />
+        <configuration Name="Debug" build_exclude_from_build="Yes" />
       </file>
     </folder>
     <folder Name="System">
@@ -44,9 +44,11 @@
       <folder Name="inc">
         <file file_name="Driver/inc/nrf52840.h" />
         <file file_name="Driver/inc/nrf52840_gpio.h" />
+        <file file_name="Driver/inc/nrf52840_spim.h" />
       </folder>
       <folder Name="src">
         <file file_name="Driver/src/nrf52840_gpio.c" />
+        <file file_name="Driver/src/nrf52840_spim.c" />
       </folder>
     </folder>
     <folder Name="Docs">

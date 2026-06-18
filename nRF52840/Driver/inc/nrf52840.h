@@ -172,4 +172,108 @@ typedef struct {
 #define GPIOP1                        ((GPIO_Reg_def_t*)NRF_P1_BASE)
 
 
+
+/******************************************************************************
+ * SPIM
+ ******************************************************************************/
+
+/* ------------------------- SPIM Register Definition ----------------------- */
+
+typedef struct
+{
+    __vo uint32_t RESERVED0[4];      // 0x000 - 0x00C
+
+    __vo uint32_t TASKS_START;       // 0x010
+    __vo uint32_t TASKS_STOP;        // 0x014
+
+    __vo uint32_t RESERVED1;         // 0x018
+
+    __vo uint32_t TASKS_SUSPEND;     // 0x01C
+    __vo uint32_t TASKS_RESUME;      // 0x020
+
+    __vo uint32_t RESERVED2[56];     // 0x024 - 0x100
+
+    __vo uint32_t EVENTS_STOPPED;    // 0x104
+
+    __vo uint32_t RESERVED3[2];      // 0x108 - 0x10C
+
+    __vo uint32_t EVENTS_ENDRX;      // 0x110
+
+    __vo uint32_t RESERVED4;         // 0x114
+
+    __vo uint32_t EVENTS_END;        // 0x118
+
+    __vo uint32_t RESERVED5;         // 0x11C
+
+    __vo uint32_t EVENTS_ENDTX;      // 0x120
+
+    __vo uint32_t RESERVED6[10];     // 0x124 - 0x148
+
+    __vo uint32_t EVENTS_STARTED;    // 0x14C
+
+    __vo uint32_t RESERVED7[44];     // 0x150 - 0x1FC
+
+    __vo uint32_t SHORTS;            // 0x200
+
+    __vo uint32_t RESERVED8[64];     // 0x204 - 0x300
+
+    __vo uint32_t INTENSET;          // 0x304
+    __vo uint32_t INTENCLR;          // 0x308
+
+    __vo uint32_t RESERVED9[61];     // 0x30C - 0x3FC
+
+    __vo uint32_t STALLSTAT;         // 0x400
+
+    __vo uint32_t RESERVED10[63];    // 0x404 - 0x4FC
+
+    __vo uint32_t ENABLE;            // 0x500
+
+    __vo uint32_t RESERVED_15;       // 0x504  
+
+    __vo uint32_t PSEL_SCK;          // 0x508
+    __vo uint32_t PSEL_MOSI;         // 0x50C
+    __vo uint32_t PSEL_MISO;         // 0x510
+    __vo uint32_t PSEL_CSN;          // 0x514
+
+    __vo uint32_t RESERVED11[3];     // 0x518 - 0x520
+
+    __vo uint32_t FREQUENCY;         // 0x524
+
+    __vo uint32_t RESERVED12[3];     // 0x528 - 0x530
+
+    __vo uint32_t RXD_PTR;           // 0x534
+    __vo uint32_t RXD_MAXCNT;        // 0x538
+    __vo uint32_t RXD_AMOUNT;        // 0x53C
+    __vo uint32_t RXD_LIST;          // 0x540
+
+    __vo uint32_t TXD_PTR;           // 0x544
+    __vo uint32_t TXD_MAXCNT;        // 0x548
+    __vo uint32_t TXD_AMOUNT;        // 0x54C
+    __vo uint32_t TXD_LIST;          // 0x550
+
+    __vo uint32_t CONFIG;            // 0x554
+
+    __vo uint32_t RESERVED13[2];     // 0x558 - 0x55C
+
+    __vo uint32_t IFTIMING_RXDELAY;  // 0x560
+    __vo uint32_t IFTIMING_CSNDUR;   // 0x564
+    __vo uint32_t CSNPOL;            // 0x568
+    __vo uint32_t PSELDCX;           // 0x56C
+    __vo uint32_t DCXCNT;            // 0x570
+
+    __vo uint32_t RESERVED14[19];    // 0x574 - 0x5BC
+
+    __vo uint32_t ORC;               // 0x5C0
+
+} NRF_SPIM_RegDef_t;
+
+
+/* ------------------------- SPIM Peripheral Definition ----------------------- */
+
+#define SPIM0                        ((SPIM_Reg_def_t*)NRF_SPIM0_BASE)
+#define SPIM1                        ((SPIM_Reg_def_t*)NRF_SPIM1_BASE)
+#define SPIM2                        ((SPIM_Reg_def_t*)NRF_SPIM2_BASE)
+#define SPIM3                        ((SPIM_Reg_def_t*)NRF_SPIM3_BASE)
+
+
 /******************************* END OF FILE *********************************/
