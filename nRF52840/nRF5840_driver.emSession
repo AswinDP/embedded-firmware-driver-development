@@ -61,11 +61,11 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="37" y="230" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="Driver/inc/nrf52840.h" selected="1" top="161" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="9" y="19" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="Doc/comments.txt" selected="0" top="0" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="72" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="Board/tw_nrf52840_board.h" selected="0" top="0" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="33" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="Driver/inc/nrf52840_spim.h" selected="0" top="0" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="153" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="Driver/inc/nrf52840_gpio.h" selected="0" top="138" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="272" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="Driver/inc/nrf52840.h" selected="0" top="245" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="19" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="Doc/comments.txt" selected="0" top="0" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="72" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="Board/tw_nrf52840_board.h" selected="0" top="4" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="44" y="47" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="Driver/inc/nrf52840_spim.h" selected="1" top="26" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="252" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="Driver/inc/nrf52840_gpio.h" selected="0" top="0" codecName="Default"/>
  </Files>
  <ARMCrossStudioWindow activeProject="nRF52840_driver" fileDialogDefaultFilter="*" autoConnectTarget="J-Link" buildConfiguration="Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="C:/Users/aswin/OneDrive/Documents/embedded-firmware-driver-development/nRF52840/Driver/src" debugSearchPath="" autoConnectCapabilities="3199"/>
 </session>
