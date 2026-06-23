@@ -31,8 +31,8 @@ Purpose : SPIM header file
 
 #define SPIM_INSTANCE(Id)              \
 {                                      \
-    .Instance     = SPIM##Id           \
-    .drv_inst_idx = Id                 \
+    .Instance     = SPIM##Id,           \
+    .drv_inst_idx = Id,                 \
     .State        = SPIM_READY         \
 } 
                               
@@ -172,11 +172,11 @@ typedef struct{
 
     NRF_SPIM_RegDef_t *Instance;
 
-    uint32_t drv_inst_idx;
+    uint8_t drv_inst_idx;
 
     volatile SPIM_State_t State;
 
-}SPIM_Handle_t;
+}SPIM_Instance_t;
 
 
 /******************************************************************************
@@ -184,36 +184,36 @@ typedef struct{
  ******************************************************************************/
 
 SPIM_Status_t SPIM_Init(
-    SPIM_Handle_t *p_instance,
+    SPIM_Instance_t *p_instance,
     SPIM_Config_t *p_config);
 
 SPIM_Status_t SPIM_DeInit(
-    SPIM_Handle_t *p_instance);
+    SPIM_Instance_t *p_instance);
 
 SPIM_Status_t SPIM_Transmit(
-    SPIM_Handle_t *p_instance,
+    SPIM_Instance_t *p_instance,
     uint8_t *p_tx_buf,
     uint16_t length);
 
 SPIM_Status_t SPIM_Receive(
-    SPIM_Handle_t *p_instance,
+    SPIM_Instance_t *p_instance,
     uint8_t *p_rx_buf,
     uint16_t length);
 
 SPIM_Status_t SPIM_Transfer(
-    SPIM_Handle_t *p_instance,
+    SPIM_Instance_t *p_instance,
     uint8_t *p_tx_buf,
     uint8_t *p_rx_buf,
     uint16_t length);
 
 void SPIM_Stop(
-    SPIM_Handle_t *p_instance);
+    SPIM_Instance_t *p_instance);
 
 void SPIM_Suspend(
-    SPIM_Handle_t *p_instance);
+    SPIM_Instance_t *p_instance);
 
 void SPIM_Resume(
-    SPIM_Handle_t *p_instance);
+    SPIM_Instance_t *p_instance);
 
 
 
