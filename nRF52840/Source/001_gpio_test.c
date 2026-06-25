@@ -5,7 +5,7 @@
 
 -------------------------- END-OF-HEADER -----------------------------
 
-File    : 001_gpi_test.c
+File    : 001_gpio_test.c
 Purpose : GPIO test main file
 
 */

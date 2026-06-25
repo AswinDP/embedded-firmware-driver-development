@@ -226,7 +226,7 @@ typedef struct
 
     __vo uint32_t RESERVED10[63];    // 0x404 - 0x4FC
 
-    __vo uint32_t ENABLE;            // 0x500
+    __vo uint32_t ENABLE_SPIM;       // 0x500
 
     __vo uint32_t RESERVED_15;       // 0x504  
 

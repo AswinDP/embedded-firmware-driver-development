@@ -22,6 +22,7 @@
   <ProjectSessionItem path="nRF5840_driver"/>
   <ProjectSessionItem path="nRF5840_driver;nRF52840_driver"/>
   <ProjectSessionItem path="nRF5840_driver;nRF52840_driver;Board"/>
+  <ProjectSessionItem path="nRF5840_driver;nRF52840_driver;Config"/>
   <ProjectSessionItem path="nRF5840_driver;nRF52840_driver;Docs"/>
   <ProjectSessionItem path="nRF5840_driver;nRF52840_driver;Driver"/>
   <ProjectSessionItem path="nRF5840_driver;nRF52840_driver;Driver;inc"/>
@@ -62,12 +63,17 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="272" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="Driver/inc/nrf52840.h" selected="0" top="245" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="228" useTextEdit="1" openedFrom="C:/Users/aswin/OneDrive/Documents/embedded-firmware-driver-development/nRF52840/Driver/src/nrf52840_spim.c" useBinaryEdit="0" left="0" path="Driver/inc/nrf52840.h" selected="0" top="190" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="19" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="Doc/comments.txt" selected="0" top="0" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="72" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="Board/tw_nrf52840_board.h" selected="0" top="4" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="213" useTextEdit="1" openedFrom="C:/Users/aswin/OneDrive/Documents/embedded-firmware-driver-development/nRF52840/Driver/src/nrf52840_spim.c" useBinaryEdit="0" left="0" path="Driver/inc/nrf52840_spim.h" selected="0" top="178" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="17" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="Driver/src/nrf52840_spim.c" selected="1" top="6" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="10" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="Board/tw_nrf52840_board.h" selected="0" top="0" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="342" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="Driver/src/nrf52840_spim.c" selected="0" top="320" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="31" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="Driver/src/nrf52840_gpio.c" selected="0" top="21" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="12" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="Config/tw_nrf52840_board_config.h" selected="0" top="0" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="Driver/inc/nrf52840_gpio.h" selected="0" top="0" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="Source/main.c" selected="0" top="0" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="37" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="Source/001_gpio_test.c" selected="0" top="7" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="27" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="002_spim_test.c" selected="1" top="12" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="Driver/inc/nrf52840_spim.h" selected="0" top="0" codecName="Default"/>
  </Files>
  <ARMCrossStudioWindow activeProject="nRF52840_driver" fileDialogDefaultFilter="*" autoConnectTarget="J-Link" buildConfiguration="Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="C:/Users/aswin/OneDrive/Documents/embedded-firmware-driver-development/nRF52840/Driver/src" debugSearchPath="" autoConnectCapabilities="3199"/>
 </session>

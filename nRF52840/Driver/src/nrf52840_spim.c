@@ -11,7 +11,7 @@ Purpose : SPIM source file
 */
 
 #include "nrf52840_spim.h"
-//#include "customconfig.h"     yet to be created
+#include "tw_nrf52840_board_config.h"
 
 #if (SPIM_DEBUG_LOG_ENABLED == 1)
     #include "SEGGER_RTT.h"
@@ -148,12 +148,12 @@ SPIM_Status_t SPIM_Init(SPIM_Instance_t *p_instance, SPIM_Config_t *p_config)
              (int)p_config->BitOrder);
 
     /* Disable peripheral while reconfiguring */
-    p_instance->Instance->ENABLE = 0;
+    p_instance->Instance->ENABLE_SPIM = 0;
 
     /* Pin configuration */
-    SPIM_ConfigurePin(&p_instance->Instance->PSEL.SCK, p_config->SCK_Pin);
-    SPIM_ConfigurePin(&p_instance->Instance->PSEL.MOSI, p_config->MOSI_Pin);
-    SPIM_ConfigurePin(&p_instance->Instance->PSEL.MISO, p_config->MISO_Pin);
+    SPIM_ConfigurePin(&p_instance->Instance->PSEL_SCK, p_config->SCK_Pin);
+    SPIM_ConfigurePin(&p_instance->Instance->PSEL_MOSI, p_config->MOSI_Pin);
+    SPIM_ConfigurePin(&p_instance->Instance->PSEL_MISO, p_config->MISO_Pin);
 
     SPIM_LOG_V("Inst%u: PSEL registers written", p_instance->drv_inst_idx);
 
@@ -196,7 +196,7 @@ SPIM_Status_t SPIM_Init(SPIM_Instance_t *p_instance, SPIM_Config_t *p_config)
     p_instance->Instance->ORC = 0xFF;
 
     /* Enable peripheral. SPIM peripherals on nRF52840 use ENABLE = 7   */
-    p_instance->Instance->ENABLE = 7;
+    p_instance->Instance->ENABLE_SPIM = 7;
 
     p_instance->State = SPIM_READY;
 
@@ -233,11 +233,11 @@ SPIM_Status_t SPIM_DeInit(SPIM_Instance_t *p_instance)
 
     SPIM_LOG("DeInit: tearing down instance %u", p_instance->drv_inst_idx);
 
-    p_instance->Instance->ENABLE = 0;
+    p_instance->Instance->ENABLE_SPIM = 0;
 
-    SPIM_ConfigurePin(&p_instance->Instance->PSEL.SCK, SPIM_PIN_NOT_CONNECTED);
-    SPIM_ConfigurePin(&p_instance->Instance->PSEL.MOSI, SPIM_PIN_NOT_CONNECTED);
-    SPIM_ConfigurePin(&p_instance->Instance->PSEL.MISO, SPIM_PIN_NOT_CONNECTED);
+    SPIM_ConfigurePin(&p_instance->Instance->PSEL_SCK, SPIM_PIN_NOT_CONNECTED);
+    SPIM_ConfigurePin(&p_instance->Instance->PSEL_MOSI, SPIM_PIN_NOT_CONNECTED);
+    SPIM_ConfigurePin(&p_instance->Instance->PSEL_MISO, SPIM_PIN_NOT_CONNECTED);
 
     p_instance->State = SPIM_READY;
 
@@ -274,10 +274,10 @@ SPIM_Status_t SPIM_Transmit(SPIM_Instance_t *p_instance, uint8_t *p_tx_buf, uint
 
     p_instance->State = SPIM_BUSY_TX;
 
-    p_instance->Instance->TXD.PTR    = (uint32_t)p_tx_buf;
-    p_instance->Instance->TXD.MAXCNT = length;
-    p_instance->Instance->RXD.PTR    = 0;
-    p_instance->Instance->RXD.MAXCNT = 0;
+    p_instance->Instance->TXD_PTR    = (uint32_t)p_tx_buf;
+    p_instance->Instance->TXD_MAXCNT = length;
+    p_instance->Instance->RXD_PTR    = 0;
+    p_instance->Instance->RXD_MAXCNT = 0;
 
     p_instance->Instance->EVENTS_END = 0;
     p_instance->Instance->TASKS_START = 1;
@@ -289,7 +289,7 @@ SPIM_Status_t SPIM_Transmit(SPIM_Instance_t *p_instance, uint8_t *p_tx_buf, uint
     if (status == SPIM_SUCCESS)
     {
         SPIM_LOG("Inst%u: Transmit complete (%u bytes, txd.amount=%lu)",
-                 p_instance->drv_inst_idx, length, (unsigned long)p_instance->Instance->TXD.AMOUNT);
+                 p_instance->drv_inst_idx, length, (unsigned long)p_instance->Instance->TXD_AMOUNT);
     }
     else
     {
@@ -326,10 +326,10 @@ SPIM_Status_t SPIM_Receive(SPIM_Instance_t *p_instance, uint8_t *p_rx_buf, uint1
 
     p_instance->State = SPIM_BUSY_RX;
 
-    p_instance->Instance->TXD.PTR    = 0;
-    p_instance->Instance->TXD.MAXCNT = 0;
-    p_instance->Instance->RXD.PTR    = (uint32_t)p_rx_buf;
-    p_instance->Instance->RXD.MAXCNT = length;
+    p_instance->Instance->TXD_PTR    = 0;
+    p_instance->Instance->TXD_MAXCNT = 0;
+    p_instance->Instance->RXD_PTR    = (uint32_t)p_rx_buf;
+    p_instance->Instance->RXD_MAXCNT = length;
 
     p_instance->Instance->EVENTS_END = 0;
     p_instance->Instance->TASKS_START = 1;
@@ -341,7 +341,7 @@ SPIM_Status_t SPIM_Receive(SPIM_Instance_t *p_instance, uint8_t *p_rx_buf, uint1
     if (status == SPIM_SUCCESS)
     {
         SPIM_LOG("Inst%u: Receive complete (%u bytes, rxd.amount=%lu)",
-                 p_instance->drv_inst_idx, length, (unsigned long)p_instance->Instance->RXD.AMOUNT);
+                 p_instance->drv_inst_idx, length, (unsigned long)p_instance->Instance->RXD_AMOUNT);
         SPIM_LOG_V("Inst%u: first byte received = 0x%02X", p_instance->drv_inst_idx, p_rx_buf[0]);
     }
     else
@@ -381,10 +381,10 @@ SPIM_Status_t SPIM_Transfer(SPIM_Instance_t *p_instance, uint8_t *p_tx_buf, uint
 
     p_instance->State = SPIM_BUSY_TXRX;
 
-    p_instance->Instance->TXD.PTR    = (uint32_t)p_tx_buf;
-    p_instance->Instance->TXD.MAXCNT = length;
-    p_instance->Instance->RXD.PTR    = (uint32_t)p_rx_buf;
-    p_instance->Instance->RXD.MAXCNT = length;
+    p_instance->Instance->TXD_PTR    = (uint32_t)p_tx_buf;
+    p_instance->Instance->TXD_MAXCNT = length;
+    p_instance->Instance->RXD_PTR    = (uint32_t)p_rx_buf;
+    p_instance->Instance->RXD_MAXCNT = length;
 
     p_instance->Instance->EVENTS_END = 0;
     p_instance->Instance->TASKS_START = 1;
@@ -397,8 +397,8 @@ SPIM_Status_t SPIM_Transfer(SPIM_Instance_t *p_instance, uint8_t *p_tx_buf, uint
     {
         SPIM_LOG("Inst%u: Transfer complete (tx.amount=%lu, rx.amount=%lu)",
                  p_instance->drv_inst_idx,
-                 (unsigned long)p_instance->Instance->TXD.AMOUNT,
-                 (unsigned long)p_instance->Instance->RXD.AMOUNT);
+                 (unsigned long)p_instance->Instance->TXD_AMOUNT,
+                 (unsigned long)p_instance->Instance->RXD_AMOUNT);
         SPIM_LOG_V("Inst%u: first byte received = 0x%02X", p_instance->drv_inst_idx, p_rx_buf[0]);
     }
     else
